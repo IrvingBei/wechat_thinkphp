@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+    <div class="wrapper animated fadeInRight">
+        
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>{{$maintitle}}</h5>
+                <div class="ibox-tools">
+                    <a id="page-goback" href="{{:U('/WxMaterial/image',array('wpid'=>$wpid))}}">
+                        <i class="fa fa-arrow-left"></i> 后退
+                    </a>
+                    <a id="page-refresh" href="javascript:;">
+                        <i class="fa fa-refresh"></i> 刷新
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                
+                <form class="form-horizontal validate" method="post" action="" autocomplete="off" enctype="multipart/form-data">
+                    
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">图片名称</label>
+                        <div class="col-sm-3">
+                            <input type="text" name="image_name" class="form-control" value="{{$image_info.image_name}}" required />
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">素材图片</label>
+                        <div class="col-sm-3">
+                            <input type="file" name="image_file" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <input type="hidden" name="back_url" value="{{$back_url}}" />
+                            <input type="hidden" name="wpid" value="{{$wpid}}" />
+                            <input type="hidden" name="id" value="{{$image_info.id}}" />
+                            <button type="submit" class="btn btn-primary">保存内容</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 全局js -->
+    <script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+
+    <!-- 自定义js -->
+    <script src="__PUBLIC__/js/content.min.js?v=1.0.0"></script>
+
+</body>
+</html>

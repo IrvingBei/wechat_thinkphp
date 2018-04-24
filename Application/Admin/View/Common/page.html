@@ -1,0 +1,22 @@
+<if condition="!empty($pages['url'])" >
+  <if condition="empty($pages['prev'])">
+    <a href="javascript:void(0);">&laquo;</a>
+  <else />
+    <a href="{{$pages['prev']}}">&laquo;</a>
+  </if>
+
+  <foreach name="pages['url']" item="vo" key="k" >
+  <if condition="empty($vo)">
+     <a href="javascript:void(0);" class="current">{{$k}}</a>
+   <else />
+      <a href="{{$vo}}">{{$k}}</a>
+   </if>
+  </foreach>
+           
+            
+  <if condition="empty($pages['next'])">
+    <a href="javascript:void(0);">&raquo;</a>
+  <else />
+    <a href="{{$pages['next']}}">&raquo;</a>
+  </if>
+</if>

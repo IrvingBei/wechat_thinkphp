@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper">
+    <div class="row">
+        <div class="col-sm-12">
+             <div class="alert alert-warning">
+                <h3>
+                    <i class="fa fa-fw fa-bell"></i> 已派工的订单，请在24内在卓越系统核实派工进度，录入回传宽带账号并处理订单为已完成
+                </h3>
+                <h3>
+                    <i class="fa fa-fw fa-bell"></i> 申请退款的订单，请先关闭订单，再申请退款
+                </h3>
+                <h3 class="no-margins">
+                    <i class="fa fa-fw fa-bell"></i> 确定客户不安装的订单，请及时关闭
+                </h3>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-warning pull-right">今日</span>
+                    <h5>待处理订单</h5>
+                </div>
+                <div class="ibox-content text-right">
+                    <h1 class="no-margins">{{$processing_cnt}} 单</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right">今日</span>
+                    <h5>待完结订单</h5>
+                </div>
+                <div class="ibox-content text-right">
+                    <h1 class="no-margins">{{$dispatching_cnt}} 单</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-danger pull-right">今日</span>
+                    <h5>申请退款</h5>
+                </div>
+                <div class="ibox-content text-right">
+                    <h1 class="no-margins">{{$refund_cnt}} 单</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-info pull-right">全部</span>
+                    <h5>总派单量</h5>
+                </div>
+                <div class="ibox-content text-right">
+                    <h1 class="no-margins">{{$all_cnt}} 单</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-primary pull-right">全部</span>
+                    <h5>已完成订单</h5>
+                </div>
+                <div class="ibox-content text-right">
+                    <h1 class="no-margins">{{$completed_cnt}} 单</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label pull-right">今日</span>
+                    <h5>关闭订单</h5>
+                </div>
+                <div class="ibox-content text-right">
+                    <h1 class="no-margins">{{$close_cnt}} 单</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END -->
+</div>
+<!-- 全局js -->
+<script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+<!-- 自定义js -->
+<script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+</body>
+
+</html>

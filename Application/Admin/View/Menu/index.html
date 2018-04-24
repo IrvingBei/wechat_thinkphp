@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+    <div class="wrapper">
+        
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>菜单管理</h5>
+                <div class="ibox-tools">
+                    <a id="page-refresh" href="javascript:;">
+                        <i class="fa fa-refresh"></i> 刷新
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                
+                <div class="row">
+                    <div class="col-sm-12 m-b clearfix">
+                        <a class="btn btn-primary pull-right" href="{{:U('/Menu/info')}}"><i class="fa fa-plus"></i> 添加</a>
+                    </div>
+                </div>
+                
+                <table class="table table-bordered treeview treeview-collapse">
+                    <thead>
+                        <tr>
+                            <th>菜单</th>
+                            <th class="text-center" width="10%">链接</th>
+                            <th class="text-center" width="10%">排序</th>
+                            <th class="text-center" width="10%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <foreach name="authRuleAll" item="level_1">
+                            <tr class="L1">
+                                <td class="T1"><i class="fa fa-plus-square-o"></i> {{$level_1.title}}</td>
+                                <td class="text-center">{{$level_1.name}}</td>
+                                <td class="text-center">{{$level_1.sort}}</td>
+                                <td class="text-center"><a class="btn btn-sm btn-success" href="{{:U('/Menu/info',array('id'=>$level_1['id']))}}">编辑</a></td>
+                            </tr>
+                            <foreach name="level_1.child" item="level_2">
+                                <tr class="L2" style="display:none;">
+                                    <td class="T2"><i class="fa fa-plus-square-o"></i> {{$level_2.title}}</td>
+                                    <td class="text-center">{{$level_2.name}}</td>
+                                    <td class="text-center">{{$level_2.sort}}</td>
+                                    <td class="text-center"><a class="btn btn-sm btn-primary" href="{{:U('/Menu/info',array('id'=>$level_2['id']))}}">编辑</a></td>
+                                </tr>
+                                <foreach name="level_2.child" item="level_3">
+                                    <tr class="L3" style="display:none;">
+                                        <td class="T3"><i class="fa fa-minus-square-o"></i> {{$level_3.title}}</td>
+                                        <td class="text-center">{{$level_3.name}}</td>
+                                        <td class="text-center">{{$level_3.sort}}</td>
+                                        <td class="text-center"><a class="btn btn-sm btn-warning" href="{{:U('/Menu/info',array('id'=>$level_3['id']))}}">编辑</a></td>
+                                    </tr>
+                                </foreach>
+                            </foreach>
+                        </foreach>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+
+    <!-- 自定义js -->
+    <script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+
+</body>
+</html>

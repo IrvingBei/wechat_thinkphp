@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+    <meta name="referrer" content="never">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper">
+
+    <div class="ibox">
+        <div class="ibox-title">
+            <h5 class="text-center">{{$public_name}}-素材管理</h5>
+            <div class="ibox-tools">
+                <a id="page-goback" href="{{:U('/Wechat/main',array('wpid'=>$wpid))}}">
+                    <i class="fa fa-arrow-left"></i> 后退
+                </a>
+                <a id="page-refresh" href="javascript:;">
+                    <i class="fa fa-refresh"></i> 刷新
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <div class="row">
+                <div class="col-sm-9 m-b">
+                    <nav class="navbar navbar-default">
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{:U('WxMaterial/text',array('wpid'=>$wpid))}}">文本素材</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{:U('WxMaterial/image',array('wpid'=>$wpid))}}">图片素材</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{:U('WxMaterial/news',array('wpid'=>$wpid))}}">图文素材</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-sm-3 m-b clearfix">
+                    <a class="btn btn-primary pull-right" href="{{:U('WxMaterial/newsInfo',array('wpid'=>$wpid))}}"><i class="fa fa-plus"></i> 添加图文素材</a>
+                </div>
+            </div>
+
+            <notempty name="list_data[0]">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+
+                        <th>编号</th>
+                        <th>标题</th>
+                        <th>描述</th>
+                        <th>跳转地址</th>
+                        <th>封面图</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody class="tooltip-fn">
+                    <volist name="list_data" id="v">
+                        <tr>
+
+                            <td>{{$v.id}}</td>
+                            <td>{{$v.title}}</td>
+                            <td>{{$v.intro}}</td>
+                            <td><a href="{{$v['url']}}" target="_blank">跳转地址</a></td>
+                            <td>
+                                <!--<a href="__PUBLIC__/upload/images/wechat/{{$v['pic_url']}}" target="_blank"><img width="200" height="100" src="__PUBLIC__/upload/images/wechat/{{$v['pic_url']}}"/></a>-->
+                                <a href="{{$v['link']}}" target="_blank"><img width="200" height="100" src="{{$v['link']}}"/></a>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" href="{{:U('WxMaterial/newsInfo',array('wpid'=>$wpid,'id'=>$v['id']))}}" target="_self">编辑</a>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-sm-12 pager"><include file="Common/page" /></div>
+                </div>
+
+
+                <else />
+                <div style="padding:100px; text-align:center;"><img style="vertical-align:middle;" src="__PUBLIC__/img/weixin.png"/> 你还没有添加图文素材</div>
+            </notempty>
+
+
+        </div>
+    </div>
+
+</div>
+<!-- 全局js -->
+<script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+<!-- 自定义js -->
+<script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+<script src="__PUBLIC__/js/plugins/chartJs/Chart.min.js"></script>
+</body>
+</html>

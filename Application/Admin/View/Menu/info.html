@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+<div class="wrapper">
+    <div class="ibox">
+        <div class="ibox-title">
+            <h5>用户管理</h5>
+            <div class="ibox-tools">
+                <a id="page-goback" href="{{:U('/Menu/index')}}">
+                    <i class="fa fa-arrow-left"></i> 后退
+                </a>
+                <a id="page-refresh" href="javascript:;">
+                    <i class="fa fa-refresh"></i> 刷新
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content">
+        <form class="form-horizontal validate" method="post" action="" autocomplete="off">
+            <div class="form-group">
+                <label for="inputPid" class="col-sm-2 control-label">上级菜单</label>
+                <div class="col-sm-3">
+                    <!--<select name="pid" id="group_id" class="form-control">-->
+                        <!--<option value="0">顶级菜单</option>-->
+                        <!--<volist name='parentRow' id="item">-->
+                            <!--<if condition="isset($authRuleRow) && $authRuleRow['pid'] == $item['id']">-->
+                            <!--<option value="{{$item['id']}}" selected="selected">{{$item['title']}}</option>-->
+                            <!--<else />-->
+                            <!--<option value="{{$item['id']}}">{{$item['title']}}</option>-->
+                            <!--</if>-->
+                        <!--</volist>-->
+                    <!--</select>-->
+
+                    <select class="form-control m-b" id="group_id" name="group_id">
+                        <option value="">顶级菜单</option>
+                        <volist name="parentRow" id="group">
+                            <option value="{{$group['id']}}" <if condition="$group['id'] eq $authRuleRow['group_id']">selected='selected'</if>>{{$group['title']}}</option>
+                        </volist>
+                    </select>
+                    <select class="form-control" id="class_id" name="class_id">
+                        <option value="">二级菜单</option>
+                        <volist name='classes' id="class">
+                            <option value="{{$class['id']}}" <if condition="$class[id] eq $authRuleRow['pid']">selected='selected'</if>>{{$class['title']}}</option>
+                        </volist>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputTitle" class="col-sm-2 control-label">菜单名称</label>
+                <div class="col-sm-3">
+                    <if condition="isset($authRuleRow)">
+                    <input type="text" class="form-control" name="title" value="{{$authRuleRow['title']}}" check-type="required chinese" id="inputTitle" placeholder="菜单名称" />
+                    <else />
+                    <input type="text" class="form-control" name="title" check-type="required chinese" id="inputTitle" placeholder="菜单名称" />
+                    </if>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputName" class="col-sm-2 control-label">菜单链接</label>
+                <div class="col-sm-3">
+                    <if condition="isset($authRuleRow)">
+                    <input type="text" class="form-control" name="name" value="{{$authRuleRow.name}}" data-ajax="{{:U('/Menu/verifyname',array('id'=>$authRuleRow['id']))}}" id="inputName" check-type="required" placeholder="菜单链接">
+                    <else />
+                    <input type="text" class="form-control" name="name" id="inputName" check-type="required" data-ajax="{{:U('/Menu/verifyname')}}" placeholder="菜单链接">
+                    </if>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="inputIcon"> ICON图标 </label>
+                <div class="col-sm-3">
+                    <if condition="isset($authRuleRow)">
+                    <input type="text" class="form-control" name="icon" value="{{$authRuleRow.icon}}" id="inputIcon" placeholder="ICON图标">
+                    <else />
+                    <input type="text" class="form-control" name="icon" id="inputIcon" placeholder="ICON图标">
+                    </if>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="col-sm-2 control-label">菜单链接</label>
+                <div class="col-sm-3">
+                    <div class="radio radio-inline radio-success">
+                        <input id="islink-1" type="radio" name="islink" value="1" <if condition="isset($authRuleRow) && $authRuleRow.islink eq 1">checked="checked"</if>/>
+                        <label for="islink-1">是</label>
+                    </div>
+                    <div class="radio radio-inline radio-danger">
+                        <input id="islink-0" type="radio" name="islink" value="0" <if condition="$authRuleRow.islink eq 0">checked="checked"</if>/>
+                        <label for="islink-0">否</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="inputSort"> 排序 </label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" name="sort" value="{{$authRuleRow.sort}}" placeholder="越小越靠前">
+                </div>               
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <input type="hidden" name="id" value="{{$authRuleRow.id}}">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+            </div>
+        </form>
+            </div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+
+<!-- 自定义js -->
+<script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+<script>
+    $(function(){
+        $('#group_id').on('change',function(){
+            var group_id = $(this).val(),
+                class_id = $('#class_id');
+            class_id.html('<option value="">二级菜单</option>');
+            $.ajax({
+                type: 'POST',
+                data: 'group_id=' + group_id,
+                url: "{{:U('/Ajax/get_child_menus')}}",
+                dataType: 'json',
+                success: function(data){
+                    console.log(data);
+                    $.each(data, function(i, v){
+                        class_id.append('<option value="' + v.id + '">' + v.title + '</option>');
+                    });
+
+
+                }
+            })
+        });
+    })
+</script>
+</body>

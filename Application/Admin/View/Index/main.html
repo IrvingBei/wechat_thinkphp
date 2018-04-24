@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper">
+
+</div>
+<!-- 全局js -->
+<script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+<!-- 自定义js -->
+<script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+<script src="__PUBLIC__/js/plugins/highcharts/highcharts.js?v6.0.7"></script>
+<script>
+$(function () {
+    var _month = "{{$orderMonth}}", __month = _month.split(",");
+    $('#analysis-order-count').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '月订单量对比图'
+        },
+        xAxis: {
+            categories: __month,
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: null
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y} 单</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true,
+            borderColor: '#333333'
+        },
+        colors: ['#F8AC59', '#1C84C6'],
+        plotOptions: {
+            column: {
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: '长城宽带',
+            data: [{{$monthDataCK}}]
+        }, {
+            name: '宽带通',
+            data: [{{$monthDataKDT}}]
+        }],
+        credits: {
+            enabled: false
+        }
+    });
+
+    $('#analysis-order-proportion').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: '本月订单量占比'
+        },
+        tooltip: {
+            headerFormat: '{series.name}<br>',
+            pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        colors: ['#F8AC59', '#1C84C6'],
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    distance: -70,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: '品牌订单占比',
+            data: [
+                ['长城宽带', {{$orderCountDayCK}}],
+                ['宽带通', {{$orderCountDayKDT}}]
+            ]
+        }],
+        credits: {
+            enabled: false
+        }
+    });
+
+});
+</script>
+</body>
+
+</html>

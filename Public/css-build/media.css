@@ -1,0 +1,137 @@
+/* 
+// +----------------------------------------------------------------------
+// | 响应式调整
+// +----------------------------------------------------------------------
+*/
+
+@media(min-width:768px) {
+	.navbar-top-links .dropdown-alerts {
+		margin-left: auto;
+	}
+}
+
+@media(max-width:768px) {
+	body.fixed-sidebar .navbar-static-side {
+		display: none;
+	}
+
+	body.fixed-sidebar.mini-navbar .navbar-static-side {
+		width: 70px;
+	}
+
+	.lock-word {
+		display: none;
+	}
+
+	.navbar-form-custom {
+		display: none;
+	}
+
+	.navbar-header {
+		float: left;
+		display: inline;
+	}
+
+	.sidebard-panel {
+		position: relative;
+		z-index: 2;
+		width: auto;
+		min-height: 100%!important;
+	}
+
+	.sidebar-content .wrapper {
+		z-index: 1;
+		padding-right: 0;
+	}
+
+	.ibox-tools {
+		float: none;
+		display: block;
+		text-align: right;
+	}
+
+	.content-tabs {
+		display: none;
+	}
+
+	#content-main {
+		height: calc(100% - 100px);
+	}
+
+	.fixed-nav #content-main {
+		height: calc(100% - 38px);
+	}
+
+	.navbar-top-links li {
+		display: none!important;
+	}
+	.navbar-top-links li:first-child {
+		display: inline-block!important;
+	}
+}
+
+@media(max-width:350px) {
+	body.fixed-sidebar.mini-navbar .navbar-static-side {
+		width: 0;
+	}
+
+	.nav-close {
+		display: block;
+	}
+
+	#page-wrapper {
+		margin-left: 0!important;
+	}
+
+	.timeline-item .date {
+		position: relative;
+		padding-top: 30px;
+		width: 110px;
+		text-align: left;
+	}
+
+	.timeline-item .date i {
+		position: absolute;
+		top: 0;
+		left: 15px;
+		padding: 5px;
+		width: 30px;
+		border: 1px solid #e7eaec;
+		background: #f8f8f8;
+		text-align: center;
+	}
+
+	.timeline-item .content {
+		padding-top: 10px;
+		min-height: 100px;
+		border-top: 1px solid #e7eaec;
+		border-left: none;
+	}
+
+	.nav.navbar-top-links li.dropdown {
+		display: none;
+	}
+
+	.ibox-tools {
+		float: none;
+		display: inline-block;
+		text-align: left;
+	}
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio:1.5) {
+	#content-main {
+		overflow-y: scroll;
+		-webkit-overflow-scrolling: touch;
+	}
+}
+
+@media only screen and (min-width:768px) {
+	.vertical-timeline-content h2 {
+		font-size: 18px;
+	}
+
+	.vertical-timeline-content p {
+		font-size: 13px;
+	}
+}

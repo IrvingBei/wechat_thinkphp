@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+    <div class="wrapper">
+
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>用户管理</h5>
+                <div class="ibox-tools">
+                    <a id="page-refresh" href="javascript:;">
+                        <i class="fa fa-refresh"></i> 刷新
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-12 m-b clearfix">
+                        <a class="btn btn-primary pull-right" href="{{:U('/Admin/info')}}"><i class="fa fa-plus"></i> 添加</a>
+                    </div>
+                </div>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>邮箱</th>
+                        <th>用户组</th>
+                        <th>状态</th>
+                        <th>注册日期</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tooltip-fn">
+                    <volist name="adminRows" id="adminRow">
+                        <tr>
+                            <td>{{$adminRow.name}}</td>
+                            <td>{{$adminRow.email}}</td>
+                            <td>{{$adminRow.roleRow.name}}</td>
+                            <td>
+                                <if condition="$adminRow['status'] == 0">
+                                    <span class="text-danger">禁用</span>
+                                <else />
+                                    <span class="text-navy">启用</span>
+                                </if>
+                            </td>
+                            <td>{{$adminRow.created_at|date="Y-m-d",###}}</td>
+                            <td>
+                                <if condition="$adminRow.id neq 100">
+                                    <a href="{{:U('/Admin/info',array('id'=>$adminRow['id']))}}" class="btn btn-sm btn-success">修改</a>
+                                    <if condition="$adminRow['status'] eq 1">
+                                        <a class="btn btn-sm btn-danger" href="{{:U('/Admin/destroy',array('id'=>$adminRow['id'],'status'=>'0'))}}">禁用</a>
+                                    <else/>
+                                        <a class="btn btn-sm btn-info" href="{{:U('/Admin/destroy',array('id'=>$adminRow['id'],'status'=>'1'))}}">启用</a>
+                                    </if>
+                                <else/>
+                                    <span class="btn btn-sm btn-default">无操作</span>
+                                </if>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-sm-12 pager"><include file="Common/page" /></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 全局js -->
+    <script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+
+    <!-- 自定义js -->
+    <script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+<div class="wrapper">
+
+    <div class="ibox">
+        <div class="ibox-title">
+            <h5>角色列表</h5>
+            <div class="ibox-tools">
+                <a id="page-refresh" href="javascript:;">
+                    <i class="fa fa-refresh"></i> 刷新
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <div class="row">
+                <div class="col-sm-12 m-b clearfix">
+                    <a class="btn btn-primary pull-right" href="{{:U('/Role/info')}}"><i class="fa fa-plus"></i> 添加</a>
+                </div>
+            </div>
+
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>用户组</th>
+                    <th>说明</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody class="tooltip-fn">
+                <volist name="roleRows" id="roleRow">
+                    <tr>
+                        <td>{{$roleRow.name}}</td>
+                        <td>{{$roleRow.remark}}</td>
+                        <td>
+                            <if condition="$roleRow['status'] == 0">
+                                <span class="text-danger">禁用</span>
+                            <else />
+                                <span class="text-navy">启用</span>
+                            </if>
+                        </td>
+                        <td>
+                            <a href="{{:U('/Role/info',array('id'=>$roleRow['id']))}}" class="btn btn-sm btn-success">修改</a>
+                        </td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+
+            <div class="row">
+                <div class="col-sm-12 pager"><include file="Common/page" /></div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- 全局js -->
+<script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+
+<!-- 自定义js -->
+<script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+</body>
+</html>
+
+
+
+

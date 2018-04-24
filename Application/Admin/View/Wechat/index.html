@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+    <div class="wrapper">
+        
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>公众号管理</h5>
+                <div class="ibox-tools">
+                    <a id="page-refresh" href="javascript:;">
+                        <i class="fa fa-refresh"></i> 刷新
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-9 m-b">
+                        <h3 style=" float:left;margin-bottom:15px;"><img style="vertical-align:middle; height:30px" src="__PUBLIC__/img/weixin.png"/> 我的公众号</h3>
+                    </div>
+                    <div class="col-sm-3 m-b clearfix">
+                        <a class="btn btn-primary pull-right" href="{{:U('info')}}"><i class="fa fa-plus"></i> 添加公众号</a>
+                    </div>
+                </div>
+
+                <notempty name="list_data[0]">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+
+                            <th>公众号ID</th>
+                            <th>公众号名称</th>
+                            <th>原始ID</th>
+                            <th>AppID</th>
+                            <th>操作</th> 
+                        </tr>
+                    </thead>
+
+                    <tbody class="tooltip-fn">
+                        <volist name="list_data" id="v">
+                        <tr>
+
+                            <td>{{$v.id}}</td>
+                            <td>{{$v.public_name}}</td>
+                            <td>{{$v.token}}</td>
+                            <td>{{$v.appid}}</td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" href="{{:U('Wechat/main',array('wpid'=>$v['id']))}}">进入管理</a>
+                                <a class="btn btn-sm btn-primary" href="{{:U('Wechat/info',array('id'=>$v['id']))}}">编辑</a>
+                            </td>
+                        </tr>
+                        </volist>
+                     </tbody>
+                </table>
+                    <else />
+                    <div style="padding:100px; text-align:center;"><img style="vertical-align:middle;" src="__PUBLIC__/img/weixin.png"/> 你还没有创建公众号</div>
+                </notempty>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 全局js -->
+    <script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+
+    <!-- 自定义js -->
+    <script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+    <script>
+    $(function(){
+        var checkbox = $('.check-all, .check-child');
+        checkbox.on('click', function(){
+            var obj = batch();
+            if(obj.num < 1){
+                $('tfoot').hide();
+            }else{
+                $('tfoot').show();
+            }
+        });
+
+        var submit = $('tfoot').find('button');
+        submit.on('click', function(){
+            var obj = batch();
+            if(obj.num < 1){
+                _alert('至少选择一个商品套餐','error');
+                return false;
+            }else{
+                swal({
+                    title: "批量处理",
+                    text: "当前选中：" + obj.num + " 个商品套餐",
+                    //type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: "#1ab394",
+                    confirmButtonText: "确认",
+                    cancelButtonText: "取消",
+                    closeOnConfirm: false
+                },
+                function(){
+                    submit.parents('form').submit();
+                });
+            }
+        });
+
+        function batch(){
+            var obj = {}; obj.num = 0;
+            $('.check-child:checked').each(function(){
+                obj.num++;
+            });
+            return obj;
+        }
+    });
+    </script>
+
+</body>
+</html>

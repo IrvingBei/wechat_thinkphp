@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper">
+
+    <div class="ibox">
+        <div class="ibox-title">
+            <h5 class="text-center">{{$public_name}}-自动回复管理</h5>
+            <div class="ibox-tools">
+                <a id="page-goback" href="{{:U('/Wechat/main',array('wpid'=>$wpid))}}">
+                    <i class="fa fa-arrow-left"></i> 后退
+                </a>
+                <a id="page-refresh" href="javascript:;">
+                    <i class="fa fa-refresh"></i> 刷新
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <div class="row">
+                <div class="col-sm-9 m-b">
+                    <nav class="navbar navbar-default">
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{:U('WxAutoReply/text',array('wpid'=>$wpid))}}">文本消息</a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{:U('WxAutoReply/image',array('wpid'=>$wpid))}}">图片消息</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{:U('WxAutoReply/news',array('wpid'=>$wpid))}}">图文消息</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-9 m-b">
+                    <form method="get" action="" autocomplete="off">
+                        <div class="row">
+                            <div class="col-sm-3 m-b">
+                                <select name="addons" class="form-control">
+                                    <notempty name="addonList">
+                                        <option value="">自动回复类型</option>
+                                        <volist name="addonList" id="vo">
+                                            <option value="{{$vo.addons}}">{{$vo.addonsName}} </option>
+                                        </volist>
+                                    </notempty>
+                                </select>
+                            </div>
+                            <div class="col-sm-3 m-b">
+                                <select name="status" class="form-control">
+                                    <option value="">状态</option>
+                                    <option value=1 <if condition="1 eq $filter['status']"> selected='selected'</if>>有效</option>
+                                    <option value=2 <if condition="2 eq $filter['status']"> selected='selected'</if>>无效</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="submit" class="btn btn-primary">查询</button>
+                                <a class="btn btn-warning" href="{{:U('image',array('wpid'=>$wpid))}}">重置</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-3 m-b clearfix">
+                    <a class="btn btn-primary pull-right" href="{{:U('WxAutoReply/imageInfo',array('wpid'=>$wpid))}}"><i class="fa fa-plus"></i> 添加图片消息</a>
+                </div>
+            </div>
+
+
+            <notempty name="list_data[0]">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+
+                        <th>编号</th>
+                        <th>规则类型</th>
+                        <th>消息顺序</th>
+                        <th>关键词</th>
+                        <th>状态</th>
+                        <th>素材id</th>
+                        <th>图片内容</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody class="tooltip-fn">
+                    <volist name="list_data" id="v">
+                        <tr>
+
+                            <td>{{$v.id}}</td>
+                            <td>{{$v.addons}}</td>
+                            <td>{{$v.sort}}</td>
+                            <td>{{$v.keyword}}</td>
+                            <td class="text-center"><if condition="$v.status eq 1">有效<else />无效</if></td>
+                            <td>{{$v.media_id}}</td>
+                            <td>
+                                <a href="__PUBLIC__/upload/images/wechat/{{$v['cover_url']}}" target="_blank"><img width="200" height="100" src="__PUBLIC__/upload/images/wechat/{{$v['cover_url']}}"/></a>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" href="{{:U('WxAutoReply/imageInfo',array('wpid'=>$wpid,'id'=>$v['id']))}}" target="_self">编辑</a>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-sm-12 pager"><include file="Common/page" /></div>
+                </div>
+
+
+                <else />
+                <div style="padding:100px; text-align:center;"><img style="vertical-align:middle;" src="__PUBLIC__/img/weixin.png"/> 你还没有添加图片消息</div>
+            </notempty>
+
+
+        </div>
+    </div>
+
+</div>
+<!-- 全局js -->
+<script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+<!-- 自定义js -->
+<script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+<script src="__PUBLIC__/js/plugins/chartJs/Chart.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+    <php>if(isset($filter['addons'])) { </php>
+            $("select[name='addons']").val('{{$filter.addons}}')
+            <php> } </php>
+
+    });
+</script>
+</body>
+</html>

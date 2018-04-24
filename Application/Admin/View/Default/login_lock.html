@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <title>登录 - DrLiu管理系统</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=2017" rel="stylesheet">
+    <script>if(window.top !== window.self){ window.top.location = window.location;}</script>
+</head>
+
+<body id="login-page" class="gray-bg">
+    <div class="middle-box text-center animated fadeInDown">
+        <div class="login-box">
+            <big>DrLiu - 后台管理系统</big>
+            <form class="m-t" role="form" method="post">
+                <div class="form-group">
+                    <input type="email" name="email" class="form-control" id="exampleInputEmail3" value="{{$adminRow.email}}" placeholder="用户名" disabled>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" id="exampleInputPassword3" placeholder="密码">
+                </div>
+                <button type="submit" class="btn btn-success block full-width m-b">登 录</button>
+            </form>
+            <p>DrLiu &copy; 2017</p>
+        </div>
+    </div>
+    <!-- 全局js -->
+    <script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+    <div class="viewFramework-sidebar">
+        <!-- sidebar -->
+        <script type="text/javascript">
+        //document.oncontextmenu=function(){ return false }
+        </script>
+    <div id="sidebar" product-id="account" class="sidebar-content">
+        <!-- ngIf: !loadingState -->
+        <div class="sidebar-inner ng-scope">
+            <!-- ngIf: versionGreaterThan1_3_21 -->
+            <div id='sidebar-icon' class="sidebar-fold ng-scope icon-unfold"></div>
+            <!-- end ngIf: versionGreaterThan1_3_21 -->
+            <div class="sidebar-nav">
+                <ul class="entrance-nav sidebar-trans" id="nav" style="height:auto;">
+                <php>if($menuList){
+                    foreach($menuList as  $model){</php>
+                        <li class="nav-item ng-scope">
+                            <if condition="empty($model['child'])">
+                            <a href="{{$model.name}}" data-submenu="{{$model.id}}" data-count="4" class="ng-scope">
+                                <div class="nav-icon"><span class="{{$model.icon}}"></span></div><span class="nav-title ng-binding">{{$model.title}}</span>
+                            </a>
+                            <else />
+                            <a href="" data-submenu="{{$model.id}}" data-count="4" class="ng-scope">
+                                <div class="nav-icon"><span class="{{$model.icon}}"></span></div><span class="nav-title ng-binding">{{$model.title}}</span>
+                            </a>
+                            </if>
+                        </li>
+                <php>}}</php>
+                </ul>
+
+            </div>
+
+            <div id="time" class="time">
+                <font id="today"></font>
+            </div>
+        </div>
+        <!-- end ngIf: !loadingState -->
+    <!-- ngIf: loadingState -->
+    </div>
+        <!-- /sidebar -->
+    </div>

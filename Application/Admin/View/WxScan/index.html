@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper">
+
+    <div class="ibox">
+        <div class="ibox-title">
+            <h5 class="text-center">自定义二维码扫码统计</h5>
+            <div class="ibox-tools">
+                <a id="page-goback" href="{{:U('/Wechat/main',array('wpid'=>$wpid))}}">
+                    <i class="fa fa-arrow-left"></i> 后退
+                </a>
+                <a id="page-refresh" href="javascript:;">
+                    <i class="fa fa-refresh"></i> 刷新
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content">
+
+            <div class="row">
+                <div class="col-sm-9 m-b">
+                    <form method="get" action="" autocomplete="off">
+                        <div class="row">
+                            <div class="col-sm-3 m-b">
+                                <select name="event_key_data" class="form-control">
+                                    <option value="">二维码参数</option>
+                                    <volist name="event_key" id="v">
+                                        <option value="{{$v.event_key_data}}" <if condition="$filter.event_key_data eq $v['event_key_data']">selected="selected"</if>>{{$v.event_key_data}}</option>
+                                    </volist>
+                                </select>
+                            </div>
+                            <div class="col-sm-3 m-b">
+                                <select name="token" class="form-control">
+                                    <option value="">宽带品牌</option>
+                                    <volist name="apps" id="v">
+                                        <option value="{{$v.token}}" <if condition="$filter.token eq $v['token']">selected="selected"</if>>{{$v.public_name}}</option>
+                                    </volist>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="submit" class="btn btn-primary">查询</button>
+                                <a class="btn btn-warning" href="{{:U('index')}}">重置</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--表头结束-->
+
+            <notempty name="list_data[0]">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+
+                        <th>编号</th>
+                        <th>日期</th>
+                        <th>关键词</th>
+                        <th>扫码数量</th>
+                    </tr>
+                    </thead>
+
+                    <tbody class="tooltip-fn">
+                    <volist name="list_data" id="v">
+                        <tr>
+
+                            <td>{{$i}}</td>
+                            <td>{{$v.time_day}}</td>
+                            <td>{{$v.event_key_data}}</td>
+                            <td>{{$v.access_num}}</td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-sm-12 pager"><include file="Common/page" /></div>
+                </div>
+
+                <else />
+                <div style="padding:100px; text-align:center;"><img style="vertical-align:middle;" src="__PUBLIC__/img/weixin.png"/> 暂无扫码数据</div>
+            </notempty>
+        </div>
+    </div>
+
+</div>
+<!-- 全局js -->
+<script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+<!-- 自定义js -->
+<script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+<script src="__PUBLIC__/js/plugins/chartJs/Chart.min.js"></script>
+
+</body>
+</html>

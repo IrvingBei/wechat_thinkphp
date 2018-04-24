@@ -1,0 +1,48 @@
+<?php
+    if(C('LAYOUT_ON')) {
+        echo '{__NOLAYOUT__}';
+    }
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <title>DrLiu管理系统</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=2017" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+    
+    <div class="middle-box text-center animated fadeInDown">
+        <?php if(isset($message)) {?>
+        <h1><i class="fa fa-smile-o text-navy"></i></h1>
+        <p class="success"><?php echo($message); ?></p>
+        <?php }else{?>
+        <h1><i class="fa fa-frown-o text-danger"></i></h1>
+        <p class="error"><?php echo($error); ?></p>
+        <?php }?>
+        <p class="jump">
+        页面自动 <a id="href" href="<?php echo($jumpUrl); ?>">跳转</a> 等待时间： <b id="wait"><?php echo($waitSecond); ?></b>
+        </p>
+    </div>
+
+<script type="text/javascript">
+(function(){
+var wait = document.getElementById('wait'),href = document.getElementById('href').href;
+var interval = setInterval(function(){
+    var time = --wait.innerHTML;
+    if(time <= 0) {
+        location.href = href;
+        clearInterval(interval);
+    };
+}, 1000);
+})();
+</script>
+</body>
+</html>

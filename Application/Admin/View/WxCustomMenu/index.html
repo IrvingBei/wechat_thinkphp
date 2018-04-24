@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+
+
+<style type="text/css">
+    td {
+        font-size: 14px;
+    }
+    #phone {
+        position: relative;
+        margin: 0 0;
+        width: 400px;
+        height: 698px;
+        background: url(__PUBLIC__/img/preview_phone_short.jpg) no-repeat center 0;
+    }
+    #frame {
+        position: absolute;
+        left: 0;
+        margin: 100px 0 0 40px;
+        width: 320px;
+        border: 2px solid #333;
+        background: #666;
+        height: 487px;
+        width: 320px;
+        overflow: hidden;
+    }
+    .wx_menu {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        background: #fff;
+    }
+    .wx_menu .keyboard {
+        float: left;
+        width: 44px;
+        height: 50px;
+        background: url(__PUBLIC__/img/wx_menu_keyboard_icon.png) no-repeat;
+        background-size: 100% 100%;
+        border-right: 1px solid #CCC;
+    }
+    .wx_menu .menu {
+        display: -webkit-box;
+        height: 50px;
+        float: left;
+        width: 270px;
+    }
+    .wx_menu .menu>div {
+        -webkit-box-flex: 1;
+        display: block;
+        line-height: 50px;
+        color: #434343;
+        text-align: center;
+        border-right: 1px solid #ccc;
+        position: relative;
+    }
+    .wx_menu .menu>div:last-child {
+        border: none;
+    }
+    .wx_menu .menu>div img {
+        width: 12px;
+        vertical-align: -1px;
+        margin-right: 2px;
+    }
+    .wx_menu .sub_menu {
+        position: absolute;
+        bottom: -358px;
+        margin-left: 0;
+        padding: 0 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #fff;
+        text-align: center;
+        z-index: 10;
+    }
+    .m_a_i {
+        position: relative;
+        z-index: 100;
+        background: #fff;
+    }
+    .wx_menu .sub_menu a {
+        display: block;
+        color: #434343;
+        border-bottom: 1px solid #ddd;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 5px;
+        white-space: nowrap
+    }
+    .wx_menu .sub_menu a:last-child {
+        border: none;
+    }
+    .wx_menu .sub_menu em {
+        position: absolute;
+        width: 10px;
+        height: 8px;
+        bottom: -7px;
+        left: 50%;
+        margin-left: -5px;
+        background: url(__PUBLIC__/img/arrow_down.png) no-repeat center bottom;
+    }
+</style>
+
+
+
+<body class="gray-bg">
+<div class="wrapper">
+
+
+
+    <div class="ibox-title">
+        <h5 class="text-center">{{$public_name}}-自定义菜单管理</h5>
+        <div class="ibox-tools">
+            <a id="page-goback" href="{{:U('/Wechat/main',array('wpid'=>$wpid))}}">
+                <i class="fa fa-arrow-left"></i> 后退
+            </a>
+            <a id="page-refresh" href="javascript:;">
+                <i class="fa fa-refresh"></i> 刷新
+            </a>
+        </div>
+    </div>
+
+
+    <!--主体-->
+    <div class="row">
+        <!-- 预览 -->
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="ibox float-e-margins">
+
+
+
+                        <div class="" style="float:left;">
+                            <div id="phone">
+                                <div id="frame">
+                                    <div class="wx_menu"> <span class="keyboard"></span>
+                                        <div class="menu">
+                                            <volist name="list_data" id="data">
+                                                <eq name="data['pid']" value="0">
+                                                    <div class="m_a"  href="javascript:;">
+                                                        <div class="m_a_i"> <img src="__PUBLIC__/img/wx_menu_list_icon.png"/>{{$data.title}} </div>
+                                                        <div class="sub_menu">
+                                                            <div class="sub_menu_inner">
+                                                                <volist name="list_data" id="data1">
+                                                                    <if condition="$data1['pid'] eq $data['id']"> <a href="#">{{$data1.title}}</a> </if>
+                                                                </volist>
+                                                            </div>
+                                                            <em></em> </div>
+                                                    </div>
+                                                </eq>
+                                            </volist>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 数据 -->
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="ibox float-e-margins">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th width="30%"><a href="{{:U('info',['rule_id'=>$rule_id,'wpid'=>$wpid])}}">+添加菜单</a></th>
+                                <th width="50%">内容</th>
+                                <th width="20%">操作</th>
+                            </tr>
+                            </thead>
+
+                            <tbody class="tooltip-fn">
+                            <volist name="list_data" id="data">
+                                <tr>
+
+                                    <td><input class="ids" type="hidden" value="{{$data.id}}" name="ids[]">
+                                        <eq name="data['pid']" value="0"> <strong>{{$data.title}}</strong>
+                                            <else/>
+                                            &nbsp;&nbsp;&nbsp;&nbsp; ◆ {{$data.title}} </eq></td>
+                                    <td>{{$data.content}}</td>
+                                    <td><a href="{{:U('info',['id'=>$data['id'],'rule_id'=>$rule_id,'wpid'=>$wpid])}}">编辑</a> <a href="{{:U('del',['id'=>$data['id'],'wpid'=>$wpid])}}">删除</a></td>
+                                </tr>
+                            </volist>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--提交-->
+    <div class="row">
+        <!-- 提交 -->
+
+        <div class="col-md-12">
+            <div class="ibox float-e-margins">
+
+
+                <div class="col-md-12 text-center">
+                    <a class="btn btn-primary btn-lg" href="{{:U('WxCustomMenu/sendMenu',array('wpid'=>$wpid))}}">发布</a>
+                </div>
+                <!--<button style="padding:12px 40px;" class="btn ajax-post confirm" type="button" target-form="ids" url="{{:U('send_menu',['rule_id'=>$rule_id])}}">{{$submit_name|default='发布'}}</button>-->
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+<!-- 全局js -->
+<script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+<!-- 自定义js -->
+<script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+<script src="__PUBLIC__/js/plugins/chartJs/Chart.min.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        //初始化菜单样式
+        $('.m_a').each(function(index, element) {
+            var submenu = $(element).find('.sub_menu');
+            if(submenu.find('a').html()==undefined){
+                $(element).find('img').hide();
+                submenu.hide();
+            }else{
+                var mW = $(element).width();
+                var sW = submenu.width()+10+2;
+                submenu.css('margin-left',(mW-sW)/2);
+            }
+        });
+        $('.m_a').hover(function(){
+            $(this).find('.sub_menu').animate({'bottom':58},300);
+        },function(){
+            $(this).find('.sub_menu').animate({'bottom':-458},300);
+        })
+
+    })
+</script>
+</body>
+</html>

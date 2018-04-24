@@ -1,0 +1,9 @@
+/Application/Runtime/
+/Application/Common/Conf/config.php
+/Application/Common/Conf/config.json
+/Application/Home/Conf/config.php
+/Application/Admin/Conf/config.php
+/Public/upload/images/
+.htaccess
+/node_modules/
+/.idea/

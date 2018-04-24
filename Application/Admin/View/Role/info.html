@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DrLiu</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+    <div class="wrapper">
+        
+        <div class="ibox">
+            <div class="ibox-title">
+                
+                <h5>权限管理</h5>
+                <div class="ibox-tools">
+                    <a id="page-goback" href="{{:U('/Role/index')}}">
+                        <i class="fa fa-arrow-left"></i> 后退
+                    </a>
+                    <a id="page-refresh" href="javascript:;">
+                        <i class="fa fa-refresh"></i> 刷新
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+            <form class="form-horizontal" method="post" action="" autocomplete="off">
+                <div class="form-group">
+                    <label for="inputname" class="col-sm-2 control-label">用户组名称</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" name="name" value="{{$roleRow['name']}}" check-type="required chinese" id="inputname" placeholder="用户组名称" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">启用</label>
+                    <div class="col-sm-3">
+                        <div class="radio radio-inline radio-success">
+                            <input id="status-1" type="radio" name="status" value="1" <if condition="$roleRow.status eq 1">checked="checked"</if>/>
+                            <label for="status-1">是</label>
+                        </div>
+                        <div class="radio radio-inline radio-danger">
+                            <input id="status-0" type="radio" name="status" value="0" <if condition="$roleRow.status eq 0">checked="checked"</if>/>
+                            <label for="status-0">否</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">说明</label>
+                    <div class="col-sm-3">
+                        <textarea rows='4' name="remark" class="form-control">{{$roleRow['remark']}}</textarea>
+                    </div>
+                </div>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="col-sm-2">权限名称</th>
+                        <th>权限设置</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <foreach name="authRuleAll" item="authRuleRow" key="key">
+                        <tr>
+                            <td>
+                                <div class="checkbox">
+                                    <input id="check-all-{{$key}}" type="checkbox" name="rules[][id]" class="check-all" value="{{$authRuleRow.id}}" <in name="key" value="$roleAuthRuleRows">checked</in> />
+                                    <label class="text-navy" for="check-all-{{$key}}">{{$authRuleRow.title}}</label>
+                                </div>
+                            </td>
+                            <td>
+                                <foreach name="authRuleRow['child']" item="authRule" key="k">
+                                <div class="col-sm-3 m-b">
+                                    <div class="checkbox">
+                                        <input id="check-child-{{$k}}" type="checkbox" name="rules[][id]" class="check-child" value="{{$authRule.id}}" <in name="k" value="$roleAuthRuleRows">checked</in> />
+                                        <label class="text-success" for="check-child-{{$k}}">{{$authRule.title}}</label>
+                                    </div>
+                                    <div class="check-group">
+                                        <foreach name="authRule['child']" item="authRules" key="k2">
+                                        <div class="checkbox">
+                                            <input id="check-item-{{$k2}}" type="checkbox" name="rules[][id]" class="check-item" value="{{$authRules.id}}" <in name="k2" value="$roleAuthRuleRows">checked</in> />
+                                            <label for="check-item-{{$k2}}">{{$authRules.title}}</label>
+                                        </div>
+                                        </foreach>
+                                    </div>  
+                                </div>
+                                </foreach>
+                            </td>
+                        </tr>
+                        </foreach>
+                    </tbody>
+                </table>
+
+                <div class="form-group">
+                    <div class="col-sm-4 col-sm-offset-2">
+                        <input type="hidden" name="id" value="{{$roleRow.id}}" />
+                        <button type="submit" class="btn btn-primary">保存内容</button>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 全局js -->
+    <script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+
+    <!-- 自定义js -->
+    <script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+    <script>
+    $(function(){
+        $('.check-all').on('click', function(){
+            $(this).parents('td').next('td').find(':checkbox').prop('checked', $(this).is(':checked'));
+        });
+        $('.check-child').on('click', function(){
+            $(this).parents('.checkbox').next('.check-group').find(':checkbox').prop('checked', $(this).is(':checked'));
+            if($(this).is(':checked')){
+                $(this).parents('td').prev('td').find(':checkbox').prop('checked', $(this).is(':checked'));
+            }
+        });
+        $('.check-item').on('click', function(){
+            if($(this).is(':checked')){
+                $(this).parents('.check-group').prev('.checkbox').find(':checkbox').prop('checked', $(this).is(':checked'));
+                $(this).parents('td').prev('td').find(':checkbox').prop('checked', $(this).is(':checked'));
+            }
+        });
+    });
+    </script>
+
+</body>
+</html>
