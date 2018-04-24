@@ -10,7 +10,9 @@ return array(
     'TMPL_ACTION_ERROR'    => 'Default:dispatch_jump',
     'TMPL_ACTION_SUCCESS'  => 'Default:dispatch_jump',
 
+    'OCR_KEYWORD'          => array("文字","小语种","植物","动物","车辆","菜品"),
 
+    'DB_PREFIX' => 'xp_weixin_', //数据库前缀
 
     //系统支持
     'SALE_GROUP_ID'        => 11,

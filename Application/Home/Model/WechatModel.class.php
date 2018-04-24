@@ -181,9 +181,8 @@ class WechatModel extends Model
 
         //NoAnswer
         if (! isset ( $addons [$key] )){
-            //自定义点击事件
 
-            exit ();
+            $this->customReply($data,'NoAnswer');
         }
 
         // 最终也无法定位到插件，终止操作
@@ -226,7 +225,8 @@ class WechatModel extends Model
         $where['status'] = 1;
         $where['addons'] = $addons;
         //关注时自动回复不需要关键词
-        if($addons != 'Welcome' || $addons != 'NoAnswer'){
+        $exclude = array("Welcome","NoAnswer");
+        if(!in_array($addons, $exclude)){
             $where['keyword'] = $dataArr['key'];
         }
 
