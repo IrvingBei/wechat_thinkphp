@@ -75,7 +75,7 @@ class BaiduAIService extends AIService
                 $result = $this->image->plantDetect($image);
         }
         $response_time = time();
-        $this->result =$result;
+        $this->result = json_encode($result,JSON_UNESCAPED_UNICODE);
         $text = $this->error($result);
         if(empty($text)){
             $api_result = 2;
