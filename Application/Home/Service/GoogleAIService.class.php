@@ -10,6 +10,7 @@ class GoogleAIService extends AIService
         $keyfile_path = CONF_PATH.'config.json';
         putenv('GOOGLE_APPLICATION_CREDENTIALS='.$keyfile_path);
         $this->type = '小语种';
+        apiAccessCount($this->type,'total');
     }
 
     public function result($data){

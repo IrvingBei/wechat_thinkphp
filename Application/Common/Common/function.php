@@ -16,18 +16,27 @@ function getRedirectUrl(){
     return 'http://'.$_SERVER['HTTP_HOST'].'/home/page?url=';
 }
 
-
 /**
  * @param $type
+ * @param string $record
  * @param bool $incr
  * @return int|mixed
  * 获取当前接口访问量
  */
-function apiAccessCount($type,$incr = true){
+function apiAccessCount($type,$record='day',$incr = true){
 
+    //设置缓存记录不过期
+    C('SESSION_EXPIRE',0);
     print_r($type);
     $date = date("Ymd");
-    $key = "apiAccessCount:$date:$type";
+    if($record == 'day'){
+        //每天记录一次
+        $key = "apiAccessCount:$date:$type";
+    }else{
+        //
+        $key = "apiAccessCount:$type";
+    }
+
     $count = S($key);
     if(empty($count)){
         $count = 0;
