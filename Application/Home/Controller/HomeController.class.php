@@ -16,8 +16,4 @@ class HomeController extends Controller {
         echo '服务正常运行中';
     }
 
-
-
-
-
 }

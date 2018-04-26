@@ -12,6 +12,10 @@
  * 主要定义系统公共函数库
  */
 
+function getRedirectUrl(){
+    return 'http://'.$_SERVER['HTTP_HOST'].'/home/page?url=';
+}
+
 
 /**
  * @param $type

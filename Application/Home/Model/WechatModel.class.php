@@ -387,11 +387,13 @@ class WechatModel extends Model
             foreach ( $list as $k => $vo ) {
                 if ($k > 8)
                     continue;
+                //从本地跳转
+                $url = getRedirectUrl().$vo ['url'];
                 $articles [] = array (
                     'Title' => $vo ['title'],
                     'Description' => $vo ['intro'],
                     'PicUrl' =>  $vo ['link'],
-                    'Url' => $vo ['url']
+                    'Url' => $url
                 );
             }
 
@@ -466,10 +468,14 @@ class WechatModel extends Model
         if ($articles === false) {
             $map ['id'] = $sucai_id;
             $vo = M ( 'material_news' )->where ( $map )->find ();
+
+            //从本地跳转
+            $url = getRedirectUrl().$vo ['url'];
+
             // 文章内容
             $art ['title'] = $vo ['title'];
             $art ['description'] = $vo ['intro'];
-            $art ['url'] =  $vo ['url'] ;
+            $art ['url'] =  $url ;
             $pic_url = $vo ['link'];
             $art ['picurl'] = $pic_url;
             $articles [] = $art;
