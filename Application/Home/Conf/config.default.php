@@ -1,6 +1,6 @@
 <?php
 return array(
-    'DEFAULT_CONTROLLER'   => 'Index', //默认控制器名称
+    'DEFAULT_CONTROLLER'   => 'Home', //默认控制器名称
     'DEFAULT_ACTION'       => 'index', //默认操作名称
     'LAYOUT_NAME'          => 'layout',
     'LAYOUT_ON'            => false,
@@ -9,6 +9,7 @@ return array(
     'DEFAULT_AJAX_RETURN'  => 'JSON',
     'TMPL_ACTION_ERROR'    => 'Default:dispatch_jump',
     'TMPL_ACTION_SUCCESS'  => 'Default:dispatch_jump',
+
 
     'OCR_KEYWORD'          => array("文字","小语种","植物","动物","车辆","菜品"),
 
@@ -29,4 +30,5 @@ return array(
     'TOKEN_NAME'           => '__hash__', //令牌验证的表单隐藏字段名称，默认为__hash__
     'TOKEN_TYPE'           => 'md5', //令牌哈希验证规则 默认为MD5
     'TOKEN_RESET'          => true, //令牌验证出错后是否重置令牌 默认为true
+
 );

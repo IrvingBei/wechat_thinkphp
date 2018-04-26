@@ -12,6 +12,8 @@ return array(
     'DB_CHARSET'=> 'utf8', // 字符集
     'DB_DEBUG'  => '', // 数据库调试模式 开启后可以记录SQL日志
 
+    'MODULE_ALLOW_LIST' => array('Home','Admin'),
+    'DEFAULT_MODULE' => 'Admin', // 默认模块
 
     'SHOW_PAGE_TRACE'      => false,
     'URL_CASE_INSENSITIVE' => false,
@@ -22,6 +24,7 @@ return array(
     'TMPL_R_DELIM'         => '}}',
     'URL_MODEL'            => '2',
 
+
     //Redis存储
     'DATA_CACHE_PREFIX' => 'PHP:',//缓存前缀
     'DATA_CACHE_TYPE'=>'Redis',//默认动态缓存为Redis
@@ -31,7 +34,7 @@ return array(
     'REDIS_TIMEOUT'=>'300',//超时时间
     'REDIS_PERSISTENT'=>false,//是否长连接 false=短连接
     'REDIS_AUTH_PASSWORD'=>'',//AUTH认证密码
-    'DATA_CACHE_TIME'       => 120,      // 数据缓存有效期 0表示永久缓存
+    'DATA_CACHE_TIME'       => 604800,      // 数据缓存有效期 0表示永久缓存
     'DATA_CACHE_TIMEOUT'       => 300,
 
     //由redis来管理session
@@ -39,10 +42,11 @@ return array(
     'SESSION_TYPE'          =>  'Redis',    //session类型
     'SESSION_PERSISTENT'    =>  1,        //是否长连接(对于php来说0和1都一样)
     'SESSION_CACHE_TIME'    =>  1,        //连接超时时间(秒)
-    'SESSION_EXPIRE'        =>  3600,        //session有效期(单位:秒) 0表示永久缓存
+    'SESSION_EXPIRE'        =>  604800,        //session有效期(单位:秒) 0表示永久缓存
     'SESSION_PREFIX'        =>  'PHP:session:',        //session前缀
     'SESSION_REDIS_HOST'    =>  '127.0.0.1', //分布式Redis,默认第一个为主服务器
     'SESSION_REDIS_PORT'    =>  '6379',           //端口,如果相同只填一个,用英文逗号分隔
     'SESSION_REDIS_AUTH'    =>  '',    //Redis auth认证(密钥中不能有逗号),如果相同只填一个,用英文逗号分隔
+
 
 );

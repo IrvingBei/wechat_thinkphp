@@ -13,8 +13,7 @@ class HomeController extends Controller {
 
 	function index(){
 
-        $client = new GoogleAIService();
-	    die;
+        echo '服务正常运行中';
     }
 
 

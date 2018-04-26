@@ -21,15 +21,9 @@ return array(
     'AUTH_ADMIN_MODEL'     => 'Admin',
     'AUTH_AUTH_RULE_MODEL' => 'AuthRule',
 
-    'SESSION_AUTO_START'   => true,
-    'SESSION_TYPE'         =>  'Redis',    //session类型
-    'SESSION_PERSISTENT'   =>  1,        //是否长连接(对于php来说0和1都一样)
-    'SESSION_CACHE_TIME'   =>  1,        //连接超时时间(秒)
-    'SESSION_EXPIRE'       =>  3600,        //session有效期(单位:秒) 0表示永久缓存
-    'SESSION_PREFIX'       =>  'drp_sess_',        //session前缀
-    'SESSION_REDIS_HOST'   =>  '127.0.0.1', //分布式Redis,默认第一个为主服务器
-    'SESSION_REDIS_PORT'   =>  '6379',           //端口,如果相同只填一个,用英文逗号分隔
-    'SESSION_REDIS_AUTH'   =>  '',    //Redis auth认证(密钥中不能有逗号),如果相同只填一个,用英文逗号分隔
+
+    'DB_PREFIX' => 'xp_auth_', //数据库前缀
+
 
     //系统支持
     'SALE_GROUP_ID'        => 11,
@@ -46,4 +40,5 @@ return array(
     'TOKEN_NAME'           => '__hash__', //令牌验证的表单隐藏字段名称，默认为__hash__
     'TOKEN_TYPE'           => 'md5', //令牌哈希验证规则 默认为MD5
     'TOKEN_RESET'          => true, //令牌验证出错后是否重置令牌 默认为true
+
 );
