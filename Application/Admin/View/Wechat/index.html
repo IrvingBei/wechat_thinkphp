@@ -38,8 +38,6 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-
-                            <th>公众号ID</th>
                             <th>公众号名称</th>
                             <th>原始ID</th>
                             <th>AppID</th>
@@ -50,13 +48,14 @@
                     <tbody class="tooltip-fn">
                         <volist name="list_data" id="v">
                         <tr>
-
-                            <td>{{$v.id}}</td>
                             <td>{{$v.public_name}}</td>
                             <td>{{$v.token}}</td>
                             <td>{{$v.appid}}</td>
                             <td>
-                                <a class="btn btn-sm btn-primary" href="{{:U('Wechat/main',array('wpid'=>$v['id']))}}">进入管理</a>
+                                <a class="btn btn-sm btn-primary" href="{{:U('WxMaterial/text',array('wpid'=>$v['id']))}}">素材管理</a>
+                                <a class="btn btn-sm btn-primary" href="{{:U('WxAutoReply/text',array('wpid'=>$v['id']))}}">自动回复</a>
+                                <a class="btn btn-sm btn-primary" href="{{:U('WxCustomMenu/index',array('wpid'=>$v['id']))}}">自定义菜单</a>
+                                <a class="btn btn-sm btn-primary" href="{{:U('WxCustomQr/index',array('wpid'=>$v['id']))}}">扫码管理</a>
                                 <a class="btn btn-sm btn-primary" href="{{:U('Wechat/info',array('id'=>$v['id']))}}">编辑</a>
                             </td>
                         </tr>

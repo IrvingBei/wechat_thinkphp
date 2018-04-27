@@ -49,6 +49,9 @@ class WechatBaseController extends AdminController
             $this->assign ('public_name', $wx_info['public_name']);
             $this->assign ('wpid', $wx_info['id']);
             $this->assign ('token', $wx_info['token']);
+
+            $url = U('Wechat/index');
+            $this->assign ('back_url', $url);
         }
     }
 
