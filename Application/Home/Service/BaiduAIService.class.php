@@ -145,7 +145,7 @@ class BaiduAIService extends AIService
             }
         }
 
-        $this->type = '文本';
+        $this->type = '文字';
         $this->api_result = $api_result;
         $this->request_time = $request_time;
         $this->response_time = $response_time;

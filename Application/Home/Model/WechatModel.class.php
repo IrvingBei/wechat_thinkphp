@@ -167,7 +167,7 @@ class WechatModel extends Model
         if(! isset ( $addons [$key] ) && ($data['MsgType'] == 'image')){
             $type = S($openId);
             if(empty($type)){
-                $type = '文本';
+                $type = '文字';
             }
             if($type == '小语种'){
                 $client = new GoogleAIService();
