@@ -15,6 +15,7 @@ class PageController extends Controller {
     function index(){
 	    $url = $_GET['url'];
 	    if(!empty($url)){
+	        apiAccessCount($url,'total');
             header("Location: $url");
             exit;
         }else{
