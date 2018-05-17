@@ -9,22 +9,32 @@
     <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
     <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
     <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+    <meta name="referrer" content="never">
 </head>
 
 <body class="gray-bg">
 <div class="wrapper">
 
-
     <div class="ibox">
-
+        <!--<div class="ibox-title">
+            <h5 class="text-center">{{$public_name}}-素材管理</h5>
+            <div class="ibox-tools">
+                <a id="page-goback" href="{{$back_url}}">
+                    <i class="fa fa-arrow-left"></i> 后退
+                </a>
+                <a id="page-refresh" href="javascript:;">
+                    <i class="fa fa-refresh"></i> 刷新
+                </a>
+            </div>
+        </div>-->
         <div class="tabs-container">
-            <ul class="nav nav-tabs">
+    		<ul class="nav nav-tabs">
                 <li>
                     <a href="{{:U('text',array('wpid'=>$wpid))}}">
                         <i class="fa fa-file-text-o"></i> 文本素材
                     </a>
                 </li>
-                <li class="active">
+                <li>
                     <a href="{{:U('image',array('wpid'=>$wpid))}}">
                         <i class="fa fa-file-image-o"></i> 图片素材
                     </a>
@@ -34,12 +44,12 @@
                         <i class="fa fa-newspaper-o"></i> 图文素材
                     </a>
                 </li>
-                <!--<li>
+                <li class="active">
                     <a href="{{:U('rawNews',array('wpid'=>$wpid))}}">
                         <i class="fa fa-newspaper-o"></i> 微信图文素材
                     </a>
-                </li>-->
-                <div class="tab-tools">
+                </li>
+        		<div class="tab-tools">
 	                <a id="page-goback" href="{{$back_url}}">
 	                    <i class="fa fa-arrow-left"></i> 后退
 	                </a>
@@ -50,20 +60,41 @@
             </ul>
             <div class="tab-content tab-panel">
                 <div class="panel-body">
-					<div class="row">
-                        <div class="col-sm-12 m-b">
-                            <a class="btn btn-primary pull-right" href="{{:U('imageInfo',array('wpid'=>$wpid))}}"><i class="fa fa-plus"></i> 添加素材</a>
+					<div class="row m-b">
+                        <div class="col-sm-9">
+                            <form method="get" action="" autocomplete="off">
+                                <div class="row">
+                                    <div class="col-md-5 m-b">
+                                        <input name="keyword" type="text" class="form-control" value="{{$filter['keyword']}}" placeholder="请输入图文标题或描述搜索" />
+                                    </div>
+                                    <div class="col-md-3 m-b">
+                                        <select name="is_used" class="form-control">
+                                            <option value="">状态</option>
+                                            <option value=1 <if condition="1 eq $filter['is_used']"> selected='selected'</if>>已使用</option>
+                                            <option value=2 <if condition="2 eq $filter['is_used']"> selected='selected'</if>>未使用</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 m-b">
+                                        <button type="submit" class="btn btn-primary">查询</button>
+                                        <a class="btn btn-warning" href="{{:U('news',array('wpid'=>$wpid))}}">重置</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-3 clearfix">
+                            <a class="btn btn-primary pull-right fn-confirm" href="javascript:;" data-link="{{:U('syncRawNews',array('wpid'=>$wpid))}}"><i class="fa fa-refresh"></i> 同步微信素材</a>
                         </div>
                     </div>
+                    <!--表头结束-->
                     <notempty name="list_data[0]">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
 
                                 <th class="col-sm-1 text-center">编号</th>
-                                <th>图片名称</th>
-                                <th>素材id</th>
-                                <th class="text-center">图片内容</th>
+                                <th>标题</th>
+                                <th>描述</th>
+                                <th class="text-center">封面图</th>
                                 <th class="text-center">操作</th>
                             </tr>
                             </thead>
@@ -73,13 +104,17 @@
                                 <tr>
 
                                     <td class="text-center">{{$v.id}}</td>
-                                    <td>{{$v.image_name}}</td>
-                                    <td>{{$v.media_id}}</td>
+                                    <td><a href="{{$v['url']}}" target="_blank">{{$v.title}}</a></td>
+                                    <td>{{$v.digest}}</td>
                                     <td class="text-center">
-                                        <a href="__PUBLIC__/upload/images/wechat/{{$v['cover_url']}}" target="_blank"><img width="100" height="70" src="__PUBLIC__/upload/images/wechat/{{$v['cover_url']}}"/></a>
+                                        <a href="{{$v['thumb_url']}}" target="_blank"><img width="100" height="70" src="{{$v['thumb_url']}}"/></a>
                                     </td>
                                     <td class="text-center">
-                                        <a class="btn btn-sm btn-success" href="{{:U('WxMaterial/imageInfo',array('wpid'=>$wpid,'id'=>$v['id']))}}" target="_self">编辑</a>
+                                        <if condition="1 eq $v['is_used']">
+                                            <a class="btn btn-sm btn-warning">已在素材库</a>
+                                            <else />
+                                            <a class="btn btn-sm btn-success" href="{{:U('addRawNews',array('wpid'=>$wpid,'id'=>$v['id']))}}" target="_self">加入素材库</a>
+                                        </if>
                                     </td>
                                 </tr>
                             </volist>
@@ -90,13 +125,12 @@
                             <div class="col-sm-12 pager"><include file="Common/page" /></div>
                         </div>
 
-
                         <else />
                         <h2 class="wrapper text-center"> 
 		                    <p>
 		                        <i class="fa fa-4x fa-picture-o"></i>
 		                    </p>
-		                    <p class="m-t-lg">你还没有添加图片素材</p>
+		                    <p class="m-t-lg">你还没有同步图文素材</p>
 		                </h2>
                     </notempty>
                 </div>

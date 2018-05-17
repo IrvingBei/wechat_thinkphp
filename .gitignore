@@ -7,3 +7,5 @@
 .htaccess
 /node_modules/
 /.idea/
+.tags
+.tags_sorted_by_file

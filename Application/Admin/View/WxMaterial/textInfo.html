@@ -31,9 +31,12 @@
 
                 <form class="form-horizontal validate" method="post" action="" enctype="multipart/form-data" autocomplete="off">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">文本内容(最多600个字)</label>
+                        <label class="col-sm-2 control-label">文本内容</label>
                         <div class="col-sm-8">
-                            <textarea rows="5" name="content" class="form-control" required />{{$materialTextRow.content}}</textarea>
+                            <textarea rows="10" name="content" class="form-control" required />{{$materialTextRow.content}}</textarea>
+                            <label class="help-block m-t m-b-none text-warning">
+	                        	<i class="fa fa-bell"></i> 最多600个字
+		                    </label>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>

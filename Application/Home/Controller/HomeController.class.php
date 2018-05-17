@@ -1,7 +1,6 @@
 <?php
 namespace Home\Controller;
 
-use Home\Service\GoogleAIService;
 use Think\Controller;
 
 /**
@@ -12,8 +11,7 @@ class HomeController extends Controller {
 
 
 	function index(){
-
-        echo '服务正常运行中';
+        echo '服务正常运行中...';
     }
 
 }

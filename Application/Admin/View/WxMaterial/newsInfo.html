@@ -17,7 +17,7 @@
         
         <div class="ibox">
             <div class="ibox-title">
-                <h5>{{$maintitle}}</h5>
+                <h5>图文素材管理</h5>
                 <div class="ibox-tools">
                     <a id="page-goback" href="{{:U('/WxMaterial/news',array('wpid'=>$wpid))}}">
                         <i class="fa fa-arrow-left"></i> 后退
@@ -33,7 +33,7 @@
                     
                     <div class="form-group">
                         <label class="col-sm-2 control-label">标题</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <input type="text" name="title" class="form-control" value="{{$news_info.title}}" required />
                         </div>
                     </div>
@@ -43,21 +43,21 @@
                         <!--<div class="col-sm-3">
                             <input type="text" name="intro" class="form-control" value="{{$news_info.intro}}" required />
                         </div>-->
-                        <div class="col-sm-8">
+                        <div class="col-sm-4">
                             <textarea rows="5" name="intro" class="form-control" required />{{$news_info.intro}}</textarea>
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">跳转地址</label>
-                        <div class="col-sm-8">
+                        <div class="col-sm-4">
                             <input type="text" name="url" class="form-control" value="{{$news_info.url}}" required />
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">封面图片地址</label>
-                        <div class="col-sm-8">
+                        <div class="col-sm-4">
                             <input type="text" name="link" class="form-control" value="{{$news_info.link}}" />
                         </div>
                     </div>
@@ -65,12 +65,11 @@
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label">上传封面图片</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-4">
                             <input type="file" name="image_file" />
                         </div>
                     </div>
-
-
+                    <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
                             <input type="hidden" name="back_url" value="{{$back_url}}" />
