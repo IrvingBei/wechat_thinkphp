@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>长宽电信</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+    <div class="wrapper">
+
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>优惠券列表</h5>
+                <div class="ibox-tools">
+                    <a id="page-goback" href="{{$back_url}}">
+                        <i class="fa fa-arrow-left"></i> 后退
+                    </a>
+                    <a id="page-refresh" href="javascript:;">
+                        <i class="fa fa-refresh"></i> 刷新
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-9 m-b">
+                        <form method="GET" action="{{:U('couponList',array('id'=>$id))}}" autocomplete="off">
+                        <div class="row">
+                            <div class="col-sm-2 m-b">
+                                <select name="status" class="form-control">
+                                    <option value="">券状态</option>
+                                    <option value="1" <if condition="$filter.status eq 1">selected="selected"</if>>未领取</option>
+                                    <option value="2" <if condition="$filter.status eq 2">selected="selected"</if>>已领取</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="submit" class="btn btn-primary">查询</button>
+                                <a class="btn btn-warning" href="{{:U('couponList',array('id'=>$id))}}">重置</a>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-3 m-b clearfix">
+                        <a class="btn btn-primary pull-right" href="{{:U('couponImport',array('id'=>$id))}}"><i class="fa fa-plus"></i> 导入</a>
+                    </div>
+                </div>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center col-sm-1">序号</th>
+                        <th>券号</th>
+                        <th class="text-center col-sm-2">创建时间</th>
+                        <th class="text-center col-sm-2">领取时间</th>
+                        <th class="text-center col-sm-2">状态</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="couponRows" id="v">
+                        <tr>
+                            <td class="text-center">{{:get_sequence($pagesize, $i)}}</td>
+                            <td>{{$v.coupon_code}}</td>
+                            <td class="text-center">{{$v.create_time|date="Y-m-d H:i:s",###}}</td>
+                            <td class="text-center">
+                                <if condition="$v.get_time eq 0">
+                                    -
+                                    <else/>
+                                    {{$v.get_time|date="Y-m-d H:i:s",###}}
+                                </if>
+                            </td>
+                            <td class="text-center">
+                                <if condition="$v.status eq 1">
+                                    <span class="text-navy">未领取</span>
+                                    <else/>
+                                    <span class="text-danger">已领取</span>
+                                </if>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-sm-12 pager"><include file="Common/page" /></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 全局js -->
+    <script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+
+    <!-- 自定义js -->
+    <script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+</body>
+</html>

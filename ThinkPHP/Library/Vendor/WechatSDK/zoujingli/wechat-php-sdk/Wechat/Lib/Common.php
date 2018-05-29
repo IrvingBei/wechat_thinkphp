@@ -193,7 +193,7 @@ class Common
             $this->access_token = $json['access_token'];
             Tools::log("Get New AccessToken Success.", "MSG - {$this->appid}");
             //Tools::setCache($cache, $this->access_token, 5000);
-            S($cache, $this->access_token, 5000);
+            S($cache, $this->access_token, 180);
             return $this->access_token;
         }
          return false;

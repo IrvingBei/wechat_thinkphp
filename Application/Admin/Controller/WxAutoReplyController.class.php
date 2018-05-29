@@ -19,9 +19,13 @@ namespace Admin\Controller;
 use \Org\Util\Page;
 use \Think\Exception;
 use \Admin\Service\Helper;
+use Admin\Service\Log;
 
 class WxAutoReplyController extends WechatBaseController
 {
+
+    protected $function_name = 'AutoReply';
+    protected $addonList;
 
     public function __construct()
     {
@@ -30,7 +34,7 @@ class WxAutoReplyController extends WechatBaseController
         $addonList[] = array('addons'=>'Welcome','addonsName'=> '关注自动回复');
         $addonList[] = array('addons'=>'Scan','addonsName'=> '扫码自动回复');
         $addonList[] = array('addons'=>'Click','addonsName'=> '点击事件自动回复');
-        $addonList[] = array('addons'=>'NoAnswer','addonsName'=> '无应答自动回复');
+        $this->addonList = $addonList;
         $this->assign ( 'addonList', $addonList );
     }
 
@@ -65,7 +69,8 @@ class WxAutoReplyController extends WechatBaseController
         $listArr = M('auto_reply')->where($where)
             ->page($page . ", $page_row")
             ->select();
-        $list_data ['list_data'] = $listArr;
+        $list_data ['list_data'] = $this->getAddonsName($listArr);
+        //$list_data ['list_data'] = $listArr;
 
         $this->assign('pages', $show);
         $this->assign('page_row', $page_row);
@@ -121,17 +126,27 @@ class WxAutoReplyController extends WechatBaseController
 
             $this->_check_text_content($data['content']);
 
+            $info_after = $data;
+            unset($info_after['__hash__']);
+            $info_after = json_encode(($info_after),JSON_UNESCAPED_UNICODE);
+
             if($materialTextModel->create()){
                 if($create){
+                    $desc = '添加文本消息';
                     if(!$materialTextModel->add($data)){
                         throw new Exception('文本消息添加失败-'.$materialTextModel->getError(), 6001);
                     }
                 }else{
+                    $desc = '修改文本消息';
+                    $where['id'] = $data['id'];
+                    $info_before = json_encode($materialTextModel->where($where)->find(),JSON_UNESCAPED_UNICODE);
                     if($materialTextModel->save($data) === false){
                         throw new Exception('文本消息更新失败-'.$materialTextModel->getError(), 6001);
                     }
                 }
             }
+
+            Log::weixinLog($this->function_name, $this->public_name,$desc, $info_before, $info_after);
 
             $this->success("保存成功",U('text',array('wpid'=>$this->wpid)));
             die;
@@ -176,7 +191,8 @@ class WxAutoReplyController extends WechatBaseController
             ->page($page . ", $page_row")
             //->order("t.created_at desc")
             ->select();
-        $list_data ['list_data'] = $listArr;
+        $list_data ['list_data'] = $this->getAddonsName($listArr);
+        //$list_data ['list_data'] = $listArr;
 
         //echo M()->getLastSql();
         //print_r($list_data);
@@ -230,12 +246,20 @@ class WxAutoReplyController extends WechatBaseController
             $data['image_material'] = isset($params['image_material']) ? intval($params['image_material']) : 0;;
             $data['status'] = isset($params['status']) ? intval($params['status']) : 2;
 
+            $info_after = $data;
+            unset($info_after['__hash__']);
+            $info_after = json_encode(($info_after),JSON_UNESCAPED_UNICODE);
+
             if ($Model->create()) {
                 if ($update) {
+                    $desc = '修改图片消息';
+                    $where['id'] = $data['id'];
+                    $info_before = json_encode($Model->where($where)->find(),JSON_UNESCAPED_UNICODE);
                     if (!$Model->save($data)) {
                         throw new Exception('图片消息更新失败-' . $Model->getError(), 6001);
                     }
                 } else {
+                    $desc = '添加图片消息';
                     if (!$Model->add($data)) {
                         throw new Exception('图片消息添加失败-' . $Model->getError(), 6001);
                     }
@@ -243,6 +267,8 @@ class WxAutoReplyController extends WechatBaseController
             } else {
                 throw new Exception('数据校验失败-' . $Model->getError(), 6001);
             }
+
+            Log::weixinLog($this->function_name, $this->public_name,$desc, $info_before, $info_after);
 
             $this->success('添加图片消息操作成功', U('image',array('wpid'=>$this->wpid)));
             die;
@@ -288,7 +314,8 @@ class WxAutoReplyController extends WechatBaseController
             ->page($page . ", $page_row")
             //->order("t.created_at desc")
             ->select();
-        $list_data ['list_data'] = $listArr;
+        $list_data ['list_data'] = $this->getAddonsName($listArr);
+        //$list_data ['list_data'] = $listArr;
 
         //echo M()->getLastSql();
         //print_r($list_data);
@@ -345,12 +372,20 @@ class WxAutoReplyController extends WechatBaseController
             $data['group_id'] = isset($params['group_id']) ? intval($params['group_id']) : 0;;
             $data['status'] = isset($params['status']) ? intval($params['status']) : 2;
 
+            $info_after = $data;
+            unset($info_after['__hash__']);
+            $info_after = json_encode(($info_after),JSON_UNESCAPED_UNICODE);
+
             if ($Model->create()) {
                 if ($update) {
+                    $desc = '修改图文消息';
+                    $where['id'] = $data['id'];
+                    $info_before = json_encode($Model->where($where)->find(),JSON_UNESCAPED_UNICODE);
                     if (!$Model->save($data)) {
                         throw new Exception('图文消息更新失败-' . $Model->getError(), 6001);
                     }
                 } else {
+                    $desc = '添加图文消息';
                     if (!$Model->add($data)) {
                         throw new Exception('图文消息添加失败-' . $Model->getError(), 6001);
                     }
@@ -359,11 +394,28 @@ class WxAutoReplyController extends WechatBaseController
                 throw new Exception('数据校验失败-' . $Model->getError(), 6001);
             }
 
+            Log::weixinLog($this->function_name, $this->public_name,$desc, $info_before, $info_after);
+
             $this->success('添加图文消息操作成功', U('news',array('wpid'=>$this->wpid)));
             die;
 
         }
         $this->display();
+    }
+
+    private function getAddonsName($listArr){
+        $data = $this->addonList;
+        $res = array();
+        foreach ($data as $d){
+            $res[$d['addonsName']] = $d['addons'];
+        }
+        if(!empty($listArr)){
+            for($i = 0; $i < count($listArr); $i++){
+                $addons = array_search($listArr[$i]['addons'],$res);
+                $listArr[$i]['addons'] = $addons;
+            }
+        }
+        return $listArr;
     }
 
 

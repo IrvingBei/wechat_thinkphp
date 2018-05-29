@@ -26,6 +26,7 @@ class WechatBaseController extends AdminController
 
     protected $token;
     protected $wpid;
+    protected $public_name;
 
     /**
      * [_initialize description]
@@ -46,6 +47,7 @@ class WechatBaseController extends AdminController
             }
 
             $this->token = $wx_info['token'];
+            $this->public_name = $wx_info['public_name'];
             $this->assign ('public_name', $wx_info['public_name']);
             $this->assign ('wpid', $wx_info['id']);
             $this->assign ('token', $wx_info['token']);

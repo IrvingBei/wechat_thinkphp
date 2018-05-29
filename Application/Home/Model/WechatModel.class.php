@@ -13,6 +13,8 @@ class WechatModel extends Model
     protected $media;
     protected $custom;
     protected $user;
+    protected $script;
+    protected $config;
 
     protected $token;
 
@@ -23,37 +25,31 @@ class WechatModel extends Model
     {
         parent::__construct();
         vendor("WechatSDK.zoujingli.wechat-php-sdk.include");
-        /*$options = array(
-            'wechat_token'           => 'weiphp', // 填写你设定的key
-            'token'     => 'gh_9fa87e5ecbd0', // 微信号原始id
-            'appid'           => 'wx2a9675b3402c79cf', // 填写高级调用功能的app id, 请在微信开发模式后台查询
-            'appsecret'       => '2e6e92ffdb1c9cf4132c66d2e5d501e0', // 填写高级调用功能的密钥
-            'cachepath'       => LOG_PATH.'wechat/xiaopeng', // 设置SDK缓存目录（可选，默认位置在Wechat/Cache下，请保证写权限）
-            'oauth_url'       => 'http://admin.bj95079.com.cn/get-weixin-code.html', //微信授权地址
-        );*/
 
         //加载微信配置,先查看缓存中是否存在
         $key = 'wechat:config:'.$token;
         $options = S($key);
+
         if(empty($options)){
             $where['token'] = $token;
             $options = M('apps')->where($where)
-                ->field(['token','wechat_token','appid','appsecret','oauth_url'])
+                ->field(['token','wechat_token','appid','appsecret','hot_line'])
                 ->find();
             if(empty($options)){
-                exit('success');
+                exit('error');
             }
             //echo M()->getLastSql();
             $options['cachepath'] = LOG_PATH.'wechat/'.$token;
             S($key, $options,5000);
         }
-
+        $this->config = $options;
         $this->getconfig = \Wechat\Loader::config($options);
         $this->receive = new \Wechat\WechatReceive();
         $this->common = new \Wechat\Lib\Common();
         $this->custom = new \Wechat\WechatCustom();
         $this->user = new \Wechat\WechatUser();
         $this->media = new \Wechat\WechatMedia();
+        $this->script = new \Wechat\WechatScript();
 
         $this->token = $token;
 

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>DrLiu</title>
+    <title>长宽电信</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
     <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
@@ -30,17 +30,9 @@
             <div class="ibox-content">
 
                 <form class="form-horizontal validate" method="post" action="" enctype="multipart/form-data" autocomplete="off">
-
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">关键词</label>
-                        <div class="col-sm-3">
-                            <input type="text" name="keyword" class="form-control" value="{{$materialTextRow.keyword}}" required />
-                        </div>
-                    </div>
-                    <div class="hr-line-dashed"></div>
-                    <div class="form-group">
+                	<div class="form-group">
                         <label class="col-sm-2 control-label">规则类型</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-5">
                             <select name="addons" class="form-control">
                                 <notempty name="addonList">
                                     <volist name="addonList" id="vo">
@@ -49,49 +41,57 @@
                                 </notempty>
                             </select>
                         </div>
-                    </div>
-                    <div class="hr-line-dashed"></div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">消息排序</label>
-                        <div class="col-sm-3">
-                            <input type="text" name="sort" class="form-control" value="{{$materialTextRow.sort}}" required />
+                  </div>
+                  <div class="hr-line-dashed"></div>
+                <div id="top_show">
+                	<div class="form-group">
+                        <label class="col-sm-2 control-label">关键词</label>
+                        <div class="col-sm-5">
+                            <input type="text" name="keyword" class="form-control" value="{{$materialTextRow.keyword}}" required />
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">
-                            文本内容(最多600个字)
-                            <p></p>
-                            <button id="TEXT-CHOOSE-BTN" type="button" class="btn btn-info">选择文本素材</button>
-                        </label>
-
-                        <div class="col-sm-8">
-                            <textarea rows="5" id="content" name="content" class="form-control" required />{{$materialTextRow.content}}</textarea>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">消息排序</label>
+                    <div class="col-sm-5">
+                        <input type="number" name="sort" class="form-control" value="{{$materialTextRow.sort}}" required />
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">文本内容</label>
+                    <div class="col-sm-5">
+                    	<button id="TEXT-CHOOSE-BTN" type="button" class="btn btn-info m-b">选择文本素材</button>
+                        <textarea rows="10" id="content" name="content" class="form-control" required />{{$materialTextRow.content}}</textarea>
+                        <label class="help-block m-t m-b-none text-warning">
+                        	<i class="fa fa-bell"></i> 最多600个字
+	                    </label>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否启用</label>
+                    <div class="col-sm-5">
+                        <div class="radio radio-inline radio-success">
+                            <input id="cate_status1" type="radio" name="status" value="1" <if condition="$materialTextRow.status eq 1">checked="checked"</if>/>
+                            <label for="cate_status1">是</label>
+                        </div>
+                        <div class="radio radio-inline radio-danger">
+                            <input id="cate_status2" type="radio" name="status" value="2" <if condition="$materialTextRow.status neq 1">checked="checked"</if>/>
+                            <label for="cate_status2">否</label>
                         </div>
                     </div>
-                    <div class="hr-line-dashed"></div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">是否启用</label>
-                        <div class="col-sm-3">
-                            <div class="radio radio-inline radio-success">
-                                <input id="cate_status1" type="radio" name="status" value="1" <if condition="$materialTextRow.status eq 1">checked="checked"</if>/>
-                                <label for="cate_status1">是</label>
-                            </div>
-                            <div class="radio radio-inline radio-danger">
-                                <input id="cate_status2" type="radio" name="status" value="2" <if condition="$materialTextRow.status neq 1">checked="checked"</if>/>
-                                <label for="cate_status2">否</label>
-                            </div>
-                        </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <div class="col-sm-5 col-sm-offset-2">
+                        <input type="hidden" name="id" value="{{$materialTextRow.id}}" />
+                        <input type="hidden" name="wpid" value="{{$wpid}}" />
+                        <button type="submit" class="btn btn-primary">保存内容</button>
                     </div>
-                    <div class="hr-line-dashed"></div>
-                    <div class="form-group">
-                        <div class="col-sm-4 col-sm-offset-2">
-                            <input type="hidden" name="id" value="{{$materialTextRow.id}}" />
-                            <input type="hidden" name="wpid" value="{{$wpid}}" />
-                            <button type="submit" class="btn btn-primary">保存内容</button>
-                        </div>
-                    </div>
-                </form>
+                </div>
+            </form>
 
                 <div id="TEXT-CHOOSE-WINDOW" class="modal inmodal fade" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
@@ -112,7 +112,7 @@
                                 <table class="table table-bordered table-hover" style="display:none;">
                                     <thead>
                                     <tr>
-                                        <th class="text-center">编号</th>
+                                        <th class="col-sm-1 text-center">编号</th>
                                         <th class="text-center">素材文本内容</th>
                                         <th width="10%" class="text-center">选择</th>
                                     </tr>
@@ -132,8 +132,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
 
@@ -145,6 +143,8 @@
 
     <!-- 自定义js -->
     <script src="__PUBLIC__/js/content.min.js?v=1.0.0"></script>
+    
+    <script src="__PUBLIC__/js-build/message_info.js?v=1.1"></script>
     <script src="__PUBLIC__/js-build/message_text.js?v=1.1"></script>
 
     <script type="text/javascript">

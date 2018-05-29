@@ -13,12 +13,36 @@
  * @description     公共函数库
  */
 
+use \Admin\Service\HttpCurl;
+
 /**
  * 获取返回页面URL
  */
 function get_back_url($default_url=null){
     $back_url = empty($_REQUEST['back_url']) ? $_SERVER['HTTP_REFERER'] : $_REQUEST['back_url'];
     return $back_url;
+}
+
+/**
+ * [sms 短信] 
+ * @param  [string] $mobile [手机号]
+ * @param  [string] $content [短信内容]
+ */
+function SMS($mobile, $content) {
+    $url = "http://api.app2e.com/smsBigSend.api.php";
+    if($site == '101'){
+        $username = "hlwqudaokdt";
+        $password = "FD344D4B337F339593DCD59A093C5DE9";
+    }else{
+        $username = "hlwqudao";
+        $password = "94b06ab80d1573af035129e2f057db13";
+    }
+    $params = "pwd=$password&username=$username&p=$mobile&msg=$content";
+    $params = iconv("UTF-8", "GBK", $params);
+
+    $send = HttpCurl::PostUrl($url, $params);
+
+    return json_decode($send, true);
 }
 
 /**
@@ -34,8 +58,212 @@ function get_sequence($page_row = 1, $idx){
     return $seq;
 }
 
+/**
+ * 获取城市信息
+ */
+function get_area($area_level, $parent_id, $area_id, $is_show = 0){
+    if($is_open == 0){
+        $where = "is_show in (0,1)";
+    }else{
+        $where = "is_show = 1";
+    }
 
+    if($area_level){
+        $where .= " and level = $area_level";
+    }
 
+    if(isset($parent_id) && !empty($parent_id)){
+        $where .= " and parent_id = '$parent_id'";
+    }
+
+    if(isset($area_id) && !empty($area_id)){
+        $where .= " and id = '$area_id'";
+    }
+
+    $citys = M()->table("xp_area")->where("$where")->field("id,parent_id,area_name,short_name,level,is_show")->select();
+
+    return $citys;
+}
+
+/**
+ * 获取宽带品牌信息
+ */
+function get_sites($site_id = null) {
+    if (is_null($site_id)) {
+    	$res = M("site")->where("status = 1")->select();
+    } else {
+    	$res = M("site")->where("status = 1 and site_id = '$site_id'")->getField("site_name");
+    }
+    return $res;
+}
+
+/**
+ * 获取渠道信息
+ */
+function get_channels($channel_code = null) {
+    if (is_null($channel_code)) {
+        $res = M("channel")->where("status = 1")->select();
+    } else {
+        $res = M("channel")->where("channel_code = '$channel_code'")->getField("channel_name");
+    }
+    return $res;
+}
+
+function get_channels_status($status = null, $field = null){
+    $list = array(
+        1 => array('key'=>'1', 'val'=>'已上线', 'tag'=>'navy'),
+        2 => array('key'=>'2', 'val'=>'已下线', 'tag'=>''),
+        3 => array('key'=>'3', 'val'=>'未上线', 'tag'=>'warning'),
+    );
+    if(empty($status) and empty($field)){
+        return $list;
+    }else{
+        if(empty($field)){
+            $field = 'val';
+        }
+        return $list[$status][$field];
+    }
+}
+
+/**
+ * 订单状态
+ */
+function get_order_status($status = null, $field = null){
+    // text-navy 绿（正常、完成）
+    // text-success 蓝（处理，流程）
+    // text-danger 红（危险、警告）
+    // text-info 青（补充、其他）
+    // text-warning 橙色（提醒）
+    $list = array(
+        1 => array('key'=>'1', 'val'=>'未支付', 'tag'=>'danger'),
+        5 => array('key'=>'5', 'val'=>'已支付', 'tag'=>'navy'),
+        6 => array('key'=>'6', 'val'=>'线下收款', 'tag'=>'navy'),
+        7 => array('key'=>'7', 'val'=>'申请退款', 'tag'=>'warning'),
+        9 => array('key'=>'9', 'val'=>'已退款', 'tag'=>'danger'),
+    );
+    if(empty($status) and empty($field)){
+        return $list;
+    }else{
+        if(empty($field)){
+            $field = 'val';
+        }
+        return $list[$status][$field];
+    }
+}
+
+/**
+ * 订单施工状态
+ */
+function get_work_status($status = null, $field = null){
+    $list = array(
+        1 => array('key'=>'1', 'val'=>'未处理', 'tag'=>'danger'),
+        3 => array('key'=>'3', 'val'=>'处理中', 'tag'=>'warning'),
+        4 => array('key'=>'4', 'val'=>'关闭', 'tag'=>'danger'),
+        5 => array('key'=>'5', 'val'=>'已派工', 'tag'=>'success'),
+        9 => array('key'=>'9', 'val'=>'已完成', 'tag'=>'navy'),
+    );
+    if(empty($status) and empty($field)){
+        return $list;
+    }else{
+        if(empty($field)){
+            $field = 'val';
+        }
+        return $list[$status][$field];
+    }
+}
+
+/**
+ * 订单关闭原因
+ */
+function get_close_reason($key = null){
+    $coupon = array(
+        1 => '安装地址未覆盖',
+        2 => '无法与客户取得联系',
+        3 => '其他运营商客户',
+        4 => '用户无安装需求',
+        5 => '用户下错单',
+        6 => '用户通过电销或线下办理',
+        7 => '重复下单',
+        8 => '内部测试订单',
+        19 => '其它原因',
+    );
+    if(is_numeric($key)){
+        if(array_key_exists($key, $coupon)){
+            return $coupon[$key];
+        }else{
+            return '未知原因';
+        }
+    }
+    return $coupon;
+}
+
+/**
+ * 订单来源
+ */
+function get_order_source($key = null){
+    //9 其他
+    $sources = array(
+        1 => array('key'=>'1', 'val'=>'官网', 'tag'=>'warning'),
+        2 => array('key'=>'2', 'val'=>'移动', 'tag'=>'success'),
+        3 => array('key'=>'3', 'val'=>'APP', 'tag'=>'danger'),
+        4 => array('key'=>'4', 'val'=>'微信', 'tag'=>'navy'),
+        5 => array('key'=>'5', 'val'=>'小程序', 'tag'=>'navy'),
+    );
+    if(!empty($key)){
+        if(array_key_exists($key, $sources)){
+            return $sources[$key];
+        }else{
+            return '未知';
+        }
+    }
+    return $sources;
+}
+
+/**
+ * 发票类型
+ */
+function get_invoice_type($key = null){
+    $list = array(
+        '0' => '不开发票',
+        '1' => '个人',
+        '2' => '公司',
+    );
+    if(is_numeric($key)){
+        if(array_key_exists($key, $list)){
+            return $list[$key];
+        }else{
+            return '未知';
+        }
+    }
+    return $list;
+}
+
+/**
+ *获取分类
+ */
+function get_shop_category(){
+    return M('cat')->select();
+}
+
+/**
+ * 产品状态
+ */
+function product_status($status=null, $field=null){
+    $list = array(
+        1 => array('key'=>'1', 'val'=>'上架', 'tag'=>'navy'),
+        2 => array('key'=>'2', 'val'=>'下架', 'tag'=>'danger'),
+        3 => array('key'=>'3', 'val'=>'缺货', 'tag'=>'success'),
+        4 => array('key'=>'4', 'val'=>'已过期', 'tag'=>'success'),
+    );
+    if(empty($status) and empty($field)){
+        return $list;
+    }else{
+        if(empty($field)){
+            $field = 'val';
+        }
+        return $list[$status][$field];
+    }
+}
 
 
 /**
@@ -55,7 +283,72 @@ function get_img_url($group, $img_name, $prefix = ''){
     return $url;
 }
 
+/**
+ * 生成页面的TR
+ */
+function draw_attr_head($attr_ids){
+    $res = "";
+    $list = explode('_', $attr_ids);
+    $db = D('Attr')->getList();
+    $arr = array();
+    foreach ($list as $v) {
+        $attr = $db[$v];
+        $arr[$attr['group_id']] = $attr['group_name'];
+    }
+    foreach ($arr as $v) {
+        $res .= "<th>$v</th>";
+    }
+    return $res;
+}
 
+function draw_attr_info($attr_ids){
+    $res = "";
+    $list = D('Attr')->getKVList($attr_ids);
+    foreach ($list as $k=>$v) {
+        $res .= "<td>$v</td>";
+    }
+    return $res;
+}
+
+function get_shop_brand_by_cate($cate_id){
+    if(!empty($cate_id)) {
+        $brand_info = M("brand b")->field('b.brand_id,b.brand_name,b.status,cb.id,cb.cat_id')->join("left join xp_cat_brand cb on b.brand_id=cb.brand_id")
+            ->where("cb.cat_id = $cate_id")->select();
+        return $brand_info;
+    }
+}
+
+function get_staff_group($key = null){
+    $group = array(
+        1 => '销售',
+        2 => '渠道',
+    );
+    if(!empty($key)){
+        if(array_key_exists($key, $group)){
+            return $group[$key];
+        }else{
+            return '未知';
+        }
+    }
+    return $group;
+}
+
+/* 优惠券类型 */
+function get_coupon_type($key = null){
+    $coupon = array(
+        1 => '折扣券',
+        2 => '满减券',
+        3 => '无门槛券',
+    );
+    if(!empty($key)){
+        if(array_key_exists($key, $coupon)){
+            return $coupon[$key];
+        }else{
+            return '未知';
+        }
+    }
+    return $coupon;
+}
 
 /*
 * 获得本月往前的12个月
@@ -78,6 +371,25 @@ function getMonth(){
     
     return $month;
 }
+/**
+ * 报装 状态
+ */
+function get_fix_status($status = null, $field = null){
+    $list = array(
+        1 => array('key'=>'1', 'val'=>'待处理', 'tag'=>'danger'),
+        2 => array('key'=>'2', 'val'=>'已派工', 'tag'=>'navy'),
+        3 => array('key'=>'3', 'val'=>'已关闭', 'tag'=>''),
+    );
+    if(empty($status) and empty($field)){
+        return $list;
+    }else{
+        if(empty($field)){
+            $field = 'val';
+        }
+        return $list[$status][$field];
+    }
+}
+
 
 
 /**
@@ -264,3 +576,34 @@ function getSubByKey($pArray, $pKey = "", $pCondition = "") {
     }
 }
 
+
+
+/**
+ * 日志类型
+ */
+function get_log_type($key = null){
+    $type = array(
+        1 => array('key'=>'1', 'val'=>'消息'),
+        2 => array('key'=>'2', 'val'=>'接口'),
+    );
+    if(!empty($key)){
+        if(array_key_exists($key, $type)){
+            return $type[$key];
+        }else{
+            return '未知';
+        }
+    }
+    return $type;
+}
+
+/**
+ * 获取公众号信息
+ */
+function get_wechat_info($wechat_id = null) {
+    if (is_null($wechat_id)) {
+        $res = M("apps")->select();
+    } else {
+        $res = M("apps")->where(" public_id = '$wechat_id'")->getField("public_name");
+    }
+    return $res;
+}

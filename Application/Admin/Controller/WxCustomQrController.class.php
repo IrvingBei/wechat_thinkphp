@@ -20,6 +20,7 @@ use Admin\Model\WechatModel;
 use \Org\Util\Page;
 use \Think\Exception;
 use \Admin\Service\Helper;
+use Admin\Service\Log;
 
 class WxCustomQrController extends WechatBaseController
 {
@@ -65,6 +66,12 @@ class WxCustomQrController extends WechatBaseController
                     if(!$QRModel->add($data)){
                         throw new Exception('二维码添加失败-'.$QRModel->getError(), 6001);
                     }
+                    $function_name = 'CustomQr';
+                    $desc = '添加自定义二维码';
+                    $info_after = $data;
+                    unset($info_after['__hash__']);
+                    $info_after = json_encode(($info_after),JSON_UNESCAPED_UNICODE);
+                    Log::weixinLog($function_name, $this->public_name,$desc, null, $info_after);
                     $this->success("保存成功",U('index',array('wpid'=>$this->wpid)));
                     die;
                 }else{

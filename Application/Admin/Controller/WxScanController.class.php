@@ -35,6 +35,7 @@ class WxScanController extends AdminController
         $event = $filter['event'] = isset($params['event']) ? trim($params['event']) : '';
 
         $where = " type = 0 ";
+        $where .= " and ticket is not null ";
         if(!empty($filter['token'])){
             $where .= " and token = '$token' ";
         }
@@ -73,7 +74,7 @@ class WxScanController extends AdminController
         $this->assign('page_row', $page_row);
         $this->assign ( $list_data );
 
-        $sql2 = 'SELECT DISTINCT event_key_data FROM xp_weixin_qrcode_record WHERE type = 0';
+        $sql2 = 'SELECT DISTINCT event_key_data FROM xp_weixin_qrcode_record WHERE type = 0 and ticket is not null';
         $event_key = M()->query($sql2);
         $this->assign('event_key', $event_key);
 

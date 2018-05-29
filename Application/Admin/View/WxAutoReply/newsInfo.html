@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>DrLiu</title>
+    <title>长宽电信</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
     <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
@@ -18,7 +18,7 @@
         
         <div class="ibox">
             <div class="ibox-title">
-                <h5>{{$maintitle}}</h5>
+                <h5>图文消息管理</h5>
                 <div class="ibox-tools">
                     <a id="page-goback" href="{{:U('/WxAutoReply/news',array('wpid'=>$wpid))}}">
                         <i class="fa fa-arrow-left"></i> 后退
@@ -31,18 +31,9 @@
             <div class="ibox-content">
                 
                 <form class="form-horizontal validate" method="post" action="" autocomplete="off" enctype="multipart/form-data">
-                    
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">关键词</label>
-                        <div class="col-sm-3">
-                            <input type="text" name="keyword" class="form-control" value="{{$auto_reply.keyword}}" required />
-                        </div>
-                    </div>
-
-                    <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">规则类型</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-5">
                             <select name="addons" class="form-control">
                                 <notempty name="addonList">
                                     <volist name="addonList" id="vo">
@@ -53,10 +44,20 @@
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
+                    <div id="top_show">
+                    	<div class="form-group">
+	                        <label class="col-sm-2 control-label">关键词</label>
+	                        <div class="col-sm-5">
+	                            <input type="text" name="keyword" class="form-control" value="{{$auto_reply.keyword}}" required />
+	                        </div>
+	                    </div>
+	
+	                    <div class="hr-line-dashed"></div>
+                    </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">消息排序</label>
-                        <div class="col-sm-3">
-                            <input type="text" name="sort" class="form-control" value="{{$auto_reply.sort}}" required />
+                        <div class="col-sm-5">
+                            <input type="number" name="sort" class="form-control" value="{{$auto_reply.sort}}" required />
                         </div>
                     </div>
 
@@ -64,18 +65,19 @@
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label">图文素材</label>
-                        <div class="col-sm-3">
-                            图文编号：<input type="text" id="image_material" readonly="readonly" name="group_id" class="form-control" value="{{$auto_reply.group_id}}" />
-                            <br>
-                            <button id="NEWS-CHOOSE-BTN" type="button" class="btn btn-info">选择图文素材</button>
-
+                        <div class="col-sm-5">
+                        	 <button id="NEWS-CHOOSE-BTN" type="button" class="btn btn-info m-b">选择图文素材</button>
+                           	<input type="text" id="image_material" readonly="readonly" name="group_id" class="form-control" value="{{$auto_reply.group_id}}" />
+                            <label class="help-block m-t m-b-none text-warning">
+	                        	<i class="fa fa-bell"></i>   图文编号
+		                    </label>
                         </div>
                     </div>
 
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">是否启用</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-5">
                             <div class="radio radio-inline radio-success">
                                 <input id="cate_status1" type="radio" name="status" value="1" <if condition="$auto_reply.status eq 1">checked="checked"</if>/>
                                 <label for="cate_status1">是</label>
@@ -88,7 +90,7 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-sm-4 col-sm-offset-2">
+                        <div class="col-sm-5 col-sm-offset-2">
                             <input type="hidden" name="back_url" value="{{$back_url}}" />
                             <input type="hidden" name="wpid" value="{{$wpid}}" />
                             <input type="hidden" name="id" value="{{$auto_reply.id}}" />
@@ -116,10 +118,9 @@
                                 <table class="table table-bordered table-hover" style="display:none;">
                                     <thead>
                                     <tr>
-                                        <th class="text-center">编号</th>
+                                        <th class="col-sm-1 text-center">编号</th>
                                         <th class="text-center">标题</th>
-                                        <th class="text-center">描述</th>
-                                        <th class="text-center">图文地址</th>
+                                        <th>描述</th>
                                         <th class="text-center">首图</th>
                                         <th width="10%" class="text-center">选择</th>
                                     </tr>
@@ -151,6 +152,7 @@
 
     <!-- 自定义js -->
     <script src="__PUBLIC__/js/content.min.js?v=1.0.0"></script>
+    <script src="__PUBLIC__/js-build/message_info.js?v=2.0"></script>
     <script src="__PUBLIC__/js-build/message_news.js?v=2.0"></script>
     <script type="text/javascript">
         $(function(){

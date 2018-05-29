@@ -286,7 +286,8 @@ class Tools
      */
     static public function log($msg, $type = 'MSG')
     {
-        Cache::put($type . ' - ' . $msg);
+        //Cache::put($type . ' - ' . $msg);
+        add_debug_log($type . ' - ' . $msg,'wechat_api_log',2);
     }
 
 }

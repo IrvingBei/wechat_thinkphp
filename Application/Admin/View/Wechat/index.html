@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>DrLiu</title>
+    <title>长宽电信</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
     <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
@@ -25,11 +25,8 @@
                 </div>
             </div>
             <div class="ibox-content">
-                <div class="row">
-                    <div class="col-sm-9 m-b">
-                        <h3 style=" float:left;margin-bottom:15px;"><img style="vertical-align:middle; height:30px" src="__PUBLIC__/img/weixin.png"/> 我的公众号</h3>
-                    </div>
-                    <div class="col-sm-3 m-b clearfix">
+                <div class="row m-b">
+                    <div class="col-md-12 clearfix">
                         <a class="btn btn-primary pull-right" href="{{:U('info')}}"><i class="fa fa-plus"></i> 添加公众号</a>
                     </div>
                 </div>
@@ -38,10 +35,11 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>公众号名称</th>
-                            <th>原始ID</th>
-                            <th>AppID</th>
-                            <th>操作</th> 
+                            <th class="col-sm-2">公众号名称</th>
+                            <th class="col-sm-2">原始ID</th>
+                            <th class="col-sm-2">AppID</th>
+                            <th class="col-sm-2">客服热线</th>
+                            <th class="text-center">操作</th>
                         </tr>
                     </thead>
 
@@ -51,19 +49,23 @@
                             <td>{{$v.public_name}}</td>
                             <td>{{$v.token}}</td>
                             <td>{{$v.appid}}</td>
-                            <td>
+                            <td>{{$v.hot_line}}</td>
+                            <td class="text-center">
                                 <a class="btn btn-sm btn-primary" href="{{:U('WxMaterial/text',array('wpid'=>$v['id']))}}">素材管理</a>
-                                <a class="btn btn-sm btn-primary" href="{{:U('WxAutoReply/text',array('wpid'=>$v['id']))}}">自动回复</a>
-                                <a class="btn btn-sm btn-primary" href="{{:U('WxCustomMenu/index',array('wpid'=>$v['id']))}}">自定义菜单</a>
-                                <a class="btn btn-sm btn-primary" href="{{:U('WxCustomQr/index',array('wpid'=>$v['id']))}}">扫码管理</a>
-                                <a class="btn btn-sm btn-primary" href="{{:U('Wechat/info',array('id'=>$v['id']))}}">编辑</a>
+                                <a class="btn btn-sm btn-info" href="{{:U('WxAutoReply/text',array('wpid'=>$v['id']))}}">自动回复</a>
+                                <a class="btn btn-sm btn-warning" href="{{:U('WxCustomMenu/index',array('wpid'=>$v['id']))}}">自定义菜单</a>
+                                <a class="btn btn-sm btn-danger" href="{{:U('WxCustomQr/index',array('wpid'=>$v['id']))}}">扫码管理</a>
+                                <a class="btn btn-sm btn-success" href="{{:U('Wechat/info',array('id'=>$v['id']))}}">编辑</a>
                             </td>
                         </tr>
                         </volist>
                      </tbody>
                 </table>
                     <else />
-                    <div style="padding:100px; text-align:center;"><img style="vertical-align:middle;" src="__PUBLIC__/img/weixin.png"/> 你还没有创建公众号</div>
+                <h1 class="wrapper text-center"> 
+                    <i class="fa fa-4x fa-weixin"></i>
+                    <p class="m-t">你还没有创建公众号</p>
+                </h1>
                 </notempty>
             </div>
         </div>

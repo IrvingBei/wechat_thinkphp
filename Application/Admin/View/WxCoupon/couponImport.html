@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>长宽电信</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper">
+
+	<div class="ibox">
+		<div class="ibox-title">
+			<h5>优惠券数据导入</h5>
+			<div class="ibox-tools">
+				<a id="page-goback" href="{{$back_url}}">
+					<i class="fa fa-arrow-left"></i> 后退
+				</a>
+				<a id="page-refresh" href="javascript:;">
+					<i class="fa fa-refresh"></i> 刷新
+				</a>
+			</div>
+		</div>
+		<div class="ibox-content">
+			<form action="" method="post" enctype="multipart/form-data">
+				<h3>第一步：下载 Excel 模板</h3>
+				<div class="m-t-lg m-b-lg">
+					<a href="/download/coupon_code.xlsx?t=160902" class="btn btn-success"><i class="fa fa-download"></i> 下载模板</a>
+				</div>
+				<hr>
+				<form action="" method="post">
+					<h3>第二步：按照模板录入信息，并上传</h3>
+					<div class="m-t-lg m-b-lg row">
+						<div class="col-sm-3">
+							<input type="file" name="input" />
+							<input type="hidden" name="id" value='{{$id}}' />
+						</div>
+						<div class="col-sm-3">
+							<button type="submit" class="btn btn-primary">上传文件</button>
+						</div>
+					</div>
+				</form>
+				<if condition="$data neq null">
+					<hr>
+					<form action="" method="post" enctype="multipart/form-data">
+						<empty name="id">
+							<h3>第三步：选择活动信息</h3>
+							<div class="m-t-lg m-b-lg row">
+								<div class="col-sm-3 m-b">
+									<select class="form-control" id="activity_id" name="activity_id" required>
+										<option value=''>活动列表</option>
+										<volist name="activity_list" id="v">
+											<option value="{{$v.id}}">{{$v.activity_name}}</option>
+										</volist>
+									</select>
+								</div>
+							</div>
+							<hr>
+							<h3>第四步：确认数据，并确认导入 [<a href="#IFS">导入</a>]</h3>
+							<else/>
+							<h3>第三步：确认数据，并确认导入 [<a href="#IFS">导入</a>]</h3>
+						</empty>
+						<div class="m-t-lg m-b-lg">
+							<table class="table table-bordered">
+								<thead>
+								<tr>
+									<th>优惠券号</th>
+								</tr>
+								</thead>
+								<tbody>
+								<volist name="data" id="row">
+									<tr>
+										<volist name="row" id="cell">
+											<td>{{$cell}}</td>
+										</volist>
+									</tr>
+								</volist>
+								</tbody>
+							</table>
+							<input type="hidden" name="data_json" value='<php>echo json_encode($data)</php>' />
+							<input type="hidden" name="id" value='{{$id}}' />
+						</div>
+						<button id="IFS" type="submit" class="btn btn-primary">导入数据</button>
+					</form>
+				</if>
+		</div>
+	</div>
+
+</div>
+<!-- 全局js -->
+<script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+<script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+<!-- 自定义js -->
+<script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+<script src="__PUBLIC__/js/plugins/chartJs/Chart.min.js"></script>
+
+</body>
+</html>

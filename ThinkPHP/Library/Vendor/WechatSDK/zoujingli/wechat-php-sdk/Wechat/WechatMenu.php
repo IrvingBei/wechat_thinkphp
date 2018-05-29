@@ -52,7 +52,7 @@ class WechatMenu extends Common
             return false;
         }
         $result = Tools::httpPost(self::API_URL_PREFIX . self::MENU_ADD_URL . "access_token={$this->access_token}", Tools::json_encode($data));
-        if ($result) {
+        /*if ($result) {
             $json = json_decode($result, true);
             if (empty($json) || !empty($json['errcode'])) {
                 $this->errCode = isset($json['errcode']) ? $json['errcode'] : '505';
@@ -60,8 +60,9 @@ class WechatMenu extends Common
                 return $this->checkRetry(__FUNCTION__, func_get_args());
             }
             return true;
-        }
-        return false;
+        }*/
+        $json = json_decode($result, true);
+        return $json;
     }
 
     /**

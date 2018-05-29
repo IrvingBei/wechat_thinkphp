@@ -1,34 +1,20 @@
 <?php
 
-// +----------------------------------------------------------------------
-// | Copyright (c) 2017 http://www.drpeng.com.cn All rights reserved.
-// +----------------------------------------------------------------------
-// | Author: Haijiang Li <lihaijiang.1989@gmail.com>
-// +----------------------------------------------------------------------
-// | This is not a free software, unauthorized no use and dissemination.
-// +----------------------------------------------------------------------
-/**
- * @file            WechatController.class.php
- * @version         1.0
- * @date            Fri, 23 Feb 2018 11:12:07 GMT
- * @description     This is the controller class for data "user"
- */
-
 namespace Admin\Controller;
 
 use Admin\Model\WechatModel;
-use \Org\Util\Page;
-use \Think\Exception;
-use \Admin\Service\Helper;
+use Admin\Service\Log;
 
 class WxCustomMenuController extends WechatBaseController
 {
 
     public function index(){
-
-        $this->list_content ();
+       /* $this->list_content ();
+        $this->display();*/
+        $list_data = $this->getCustomMenuPid();
+        $this->assign ('list_data',$list_data);
+        $this->assign ('rule_id',0);
         $this->display();
-
     }
 
 
@@ -47,16 +33,28 @@ class WxCustomMenuController extends WechatBaseController
             if ($data ['from'] == 3 && empty ( $data ['keyword'] )) {
                 $this->error ( '400165:关键词不能为空' );
             }
+
+            $data['url'] = htmlspecialchars_decode($data['url']);
+
             unset ( $data ["material_material_type"], $data ["material_material_text_id"], $data ["material_material_news_id"], $data ["material_material_img_id"], $data ["material_material_voice_id"], $data ["material_material_video_id"] );
             /* if ($data['from'] == 1){
                 $data['keyword']='custom_material_'.$data['material'];
             } */
+            $after = $data;
+            unset($after['__hash__']);
+            $info_after = json_encode($after,JSON_UNESCAPED_UNICODE);
             if (isset ( $data ['id'] ) && ! empty ( $data ['id'] )) {
                 $map ['id'] = $data ['id'];
+
+                $desc = '修改菜单';
+                $before = M('custom_menu')->where($map)->find();
+                $info_before = json_encode($before,JSON_UNESCAPED_UNICODE);
+
                 $res = M ( 'custom_menu' )->where ( $map )->save ( $data );
             } else {
                 $data ['token'] = $this->token;
                 $res = M ( 'custom_menu' )->add ( $data );
+                $desc = '添加菜单';
             }
             if ($res !== false) {
                 // 重置一级菜单
@@ -72,6 +70,9 @@ class WxCustomMenuController extends WechatBaseController
                     'rule_id' => $data ['rule_id']
                 ] );*/
                 $url = U('index',array('wpid'=>$this->wpid));
+                $function_name = 'CustomMenu';
+                Log::weixinLog($function_name, $this->public_name,$desc, $info_before, $info_after);
+
                 $this->success ( '保存菜单成功！', $url );
             } else {
                 $this->error ( '400165:保存菜单失败' );
@@ -103,9 +104,22 @@ class WxCustomMenuController extends WechatBaseController
 
         $params = I();
         $map ['id'] = $params['id'];
+
+        //判断当前id下面是否还有子菜单
+        $data = $this->getCustomMenuPid($map ['id']);
+        if(count($data)){
+            //当前菜单下面还有子菜单
+            $this->error ( '删除父菜单之前请先删除子菜单' );
+        }
+        $before = M('custom_menu')->where($map)->find();
+        $info_before = json_encode($before,JSON_UNESCAPED_UNICODE);
         $res = M('custom_menu')->where($map)->setField('status',0);
         if($res !== false){
             $url = U('index',array('wpid'=>$this->wpid));
+            $function_name = 'CustomMenu';
+            $desc = '删除菜单';
+            Log::weixinLog($function_name,$this->public_name, $desc, $info_before, null);
+
             $this->success ( '删除菜单成功！', $url );
         }else{
             $this->error ( '400165:删除菜单失败' );
@@ -118,8 +132,8 @@ class WxCustomMenuController extends WechatBaseController
 
     // 发送菜单到微信
     public function sendMenu() {
-        $data = $this->get_data ();
 
+        $data = $this->get_data ();
         foreach ( $data as $k => $d ) {
             if ($d ['pid'] != 0)
                 continue;
@@ -158,11 +172,25 @@ class WxCustomMenuController extends WechatBaseController
 
         $Wechat = new WechatModel($this->token);
         $res = $Wechat->sendMenu($tree);
+
+        $function_name = 'CustomMenu';
+        $desc = '发送菜单到微信';
+        $info_after = json_encode($res,JSON_UNESCAPED_UNICODE);
+        $info_before = json_encode($tree,JSON_UNESCAPED_UNICODE);
         if (! isset ( $res ['errcode'] ) || $res ['errcode'] == 0) {
             $url = U('index',array('wpid'=>$this->wpid));
+            Log::weixinLog($function_name,$this->public_name, $desc, $info_before, $info_after);
             $this->success ( '发送菜单成功！', $url );
         } else {
-            $this->error ( error_msg ( $res ) );
+            if(empty($res)){
+                //获取token失败
+                $error_msg = "获取token失败";
+                $info_after = $error_msg;
+            }else{
+                $error_msg = error_msg ($res);
+            }
+            Log::weixinLog($function_name,$this->public_name, $desc, $info_before, $info_after);
+            $this->error ($error_msg);
         }
     }
 
@@ -289,6 +317,71 @@ class WxCustomMenuController extends WechatBaseController
         }
 
         return $res;
+    }
+
+    private function getCustomMenuPid($pid = 0,$rule_id = 0){
+
+        $map ['token'] = $this->token;
+        $map ['status'] = 1;
+        $map ['rule_id'] = $rule_id;
+        $map ['pid'] = $pid;
+        $list = M('custom_menu')->where ($map)->order('pid asc, sort asc')->select();
+
+        $list = $this->getMenuContent($list);
+
+        $listAll = array();
+
+        if ($list) {
+            foreach ($list as $key => $value) {
+                $listAll[$value['id']]          = $value;
+                $listAll[$value['id']]['child'] = $this->getCustomMenuPid($value['id']);
+            }
+        }
+
+
+        return $listAll;
+    }
+
+    /**
+     * @param $list_data
+     * @return mixed
+     * 获取菜单文本信息
+     */
+    private function getMenuContent($list_data){
+
+        $eventArr = [
+            'text' => '文本素材',
+            'img' => '图片素材',
+            'news' => '图文素材',
+            'voice' => '语音素材',
+            'video' => '视频素材',
+            'click' => '点击推事件 ',
+            'scancode_push' => '扫码推事件 ',
+            'scancode_waitmsg' => '扫码带提示 ',
+            'pic_sysphoto' => '弹出系统拍照发图  ',
+            'pic_photo_or_album' => '弹出拍照或者相册发图 ',
+            'pic_weixin' => '弹出微信相册发图器 ',
+            'location_select' => '弹出地理位置选择器',
+            'none' => ''
+        ];
+
+        foreach ( $list_data as &$vo ) {
+            $vo ['content'] = '';
+            if ($vo ['from'] == 1) {
+                $arr = explode ( ':', $vo ['material'] );
+                $vo ['content'] = isset ( $eventArr [$arr [0]] ) ? $eventArr [$arr [0]] : '';
+            } elseif ($vo ['from'] == 2) {
+                $vo ['content'] = $vo ['url'];
+            } elseif ($vo ['from'] == 3) {
+                $vo ['content'] = $eventArr [$vo ['type']] . ': ' . $vo ['keyword'];
+            } elseif ($vo ['from'] == 4) {
+                $vo ['content'] = '小程序：' . $vo ['pagepath'];
+            }
+        }
+
+
+        return $list_data;
+
     }
 
 }

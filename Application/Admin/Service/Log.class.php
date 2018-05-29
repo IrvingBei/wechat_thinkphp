@@ -116,4 +116,27 @@ class Log
             throw new Exception('Activity操作日志记录失败！', 5001);
         }
     }
+
+
+    /**
+     * wechat-log
+     */
+    public static function weixinLog($function_name,$public_name, $desc, $info_before, $info_after) {
+        $time = time();
+        $logAttr = array(
+            'function_name' => $function_name,
+            'public_name' => $public_name,
+            'desc' => $desc,
+            'created_at' => $time,
+            'info_before' => $info_before,
+            'info_after' => $info_after,
+            'operator_id' => session(C('USER_AUTH_KEY')),
+            'operator_name' => session('admin.name'),
+        );
+
+        $n = M("log")->add($logAttr);
+        if (!$n) {
+            throw new Exception('Activity操作日志记录失败！', 5001);
+        }
+    }
 }

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>DrLiu</title>
+    <title>长宽电信</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
     <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
@@ -17,7 +17,7 @@
         
         <div class="ibox">
             <div class="ibox-title">
-                <h5>{{$maintitle}}</h5>
+                <h5>图片消息管理</h5>
                 <div class="ibox-tools">
                     <a id="page-goback" href="{{:U('/WxAutoReply/image',array('wpid'=>$wpid))}}">
                         <i class="fa fa-arrow-left"></i> 后退
@@ -32,16 +32,8 @@
                 <form class="form-horizontal validate" method="post" action="" autocomplete="off" enctype="multipart/form-data">
                     
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">关键词</label>
-                        <div class="col-sm-3">
-                            <input type="text" name="keyword" class="form-control" value="{{$auto_reply.keyword}}" required />
-                        </div>
-                    </div>
-
-                    <div class="hr-line-dashed"></div>
-                    <div class="form-group">
                         <label class="col-sm-2 control-label">规则类型</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-5">
                             <select name="addons" class="form-control">
                                 <notempty name="addonList">
                                     <volist name="addonList" id="vo">
@@ -52,10 +44,20 @@
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
+                    <div id="top_show">
+                    	<div class="form-group">
+	                        <label class="col-sm-2 control-label">关键词</label>
+	                        <div class="col-sm-5">
+	                            <input type="text" name="keyword" class="form-control" value="{{$auto_reply.keyword}}" required />
+	                        </div>
+	                    </div>
+	
+	                    <div class="hr-line-dashed"></div>
+                    </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">消息排序</label>
-                        <div class="col-sm-3">
-                            <input type="text" name="sort" class="form-control" value="{{$auto_reply.sort}}" required />
+                        <div class="col-sm-5">
+                            <input type="number" name="sort" class="form-control" value="{{$auto_reply.sort}}" required />
                         </div>
                     </div>
 
@@ -63,21 +65,19 @@
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label">素材图片</label>
-                        <div class="col-sm-3">
-                            图片编号：<input type="text" id="image_material" readonly="readonly" name="image_material" class="form-control" value="{{$auto_reply.image_material}}" />
-                            <br>
-
-                            <!--<a class="btn btn-primary " href="{{:U('WxMaterial/imageInfo',array('wpid'=>$wpid))}}"><i class="fa fa-plus"></i> 添加图片素材</a>
-                            <br>
-                            <br>-->
-                            <button id="IMAGE-CHOOSE-BTN" type="button" class="btn btn-info">选择图片素材</button>
+                        <div class="col-sm-5">
+                        	<button id="IMAGE-CHOOSE-BTN" type="button" class="btn btn-info m-b">选择素材图片</button>
+                           	<input type="text" id="image_material" readonly="readonly" name="image_material" class="form-control" value="{{$auto_reply.image_material}}" />
+                            <label class="help-block m-t m-b-none text-warning">
+	                        	<i class="fa fa-bell"></i>  图片编号
+		                    </label>
 
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">是否启用</label>
-                        <div class="col-sm-3">
+                        <div class="col-sm-5">
                             <div class="radio radio-inline radio-success">
                                 <input id="cate_status1" type="radio" name="status" value="1" <if condition="$auto_reply.status eq 1">checked="checked"</if>/>
                                 <label for="cate_status1">是</label>
@@ -91,7 +91,7 @@
 
 
                     <div class="form-group">
-                        <div class="col-sm-4 col-sm-offset-2">
+                        <div class="col-sm-5 col-sm-offset-2">
                             <input type="hidden" name="back_url" value="{{$back_url}}" />
                             <input type="hidden" name="wpid" value="{{$wpid}}" />
                             <input type="hidden" name="id" value="{{$auto_reply.id}}" />
@@ -119,11 +119,11 @@
                                 <table class="table table-bordered table-hover" style="display:none;">
                                     <thead>
                                     <tr>
-                                        <th class="text-center">编号</th>
-                                        <th class="text-center">图片名称</th>
-                                        <th class="text-center">素材id</th>
-                                        <th class="text-center">图片内容</th>
-                                        <th width="10%" class="text-center">选择</th>
+                                        <th class="col-sm-1 text-center">编号</th>
+                                        <th class="col-sm-2 text-center">图片名称</th>
+                                        <th class="text-center" style="word-break: break-all;">素材id</th>
+                                        <th class="col-sm-2 text-center">图片内容</th>
+                                        <th class="col-sm-1 text-center">选择</th>
                                     </tr>
                                     </thead>
                                     <tbody id="SKU-LIST" class="tooltip-fn"></tbody>
@@ -153,6 +153,7 @@
 
     <!-- 自定义js -->
     <script src="__PUBLIC__/js/content.min.js?v=1.0.0"></script>
+    <script src="__PUBLIC__/js-build/message_info.js?v=1.1"></script>
     <script src="__PUBLIC__/js-build/message_image.js?v=1.1"></script>
     <script type="text/javascript">
         $(function(){

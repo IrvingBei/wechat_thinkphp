@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>长宽电信</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <link href="__PUBLIC__/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+    <div class="wrapper">
+
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>优惠券活动管理</h5>
+                <div class="ibox-tools">
+                    <a id="page-refresh" href="javascript:;">
+                        <i class="fa fa-refresh"></i> 刷新
+                    </a>
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="col-sm-9 m-b">
+                        <form method="GET" action="/WxCoupon/index" autocomplete="off">
+                        <div class="row">
+                            <div class="col-sm-2 m-b">
+                                <select name="wechat_id" class="form-control">
+                                    <option value="">微信公众号</option>
+                                    <volist name=":get_wechat_info()" id="v">
+                                        <option value="{{$v.public_id}}" <if condition="$filter.wechat_id eq $v['public_id']">selected="selected"</if>>{{$v.public_name}}</option>
+                                    </volist>
+                                </select>
+                            </div>
+                            <div class="col-sm-3 m-b">
+                                <input type="text" class="form-control" placeholder="活动名称或关键词" name="keyword" value="{{$filter.keyword}}" >
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="submit" class="btn btn-primary">查询</button>
+                                <a class="btn btn-warning" href="{{:U('index')}}">重置</a>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-3 m-b clearfix">
+                        <a class="btn btn-primary pull-right" href="{{:U('info')}}"><i class="fa fa-plus"></i> 添加</a>
+                    </div>
+                </div>
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center">序号</th>
+                        <th>公众号名称</th>
+                        <th>活动名称</th>
+                        <th>关键词</th>
+                        <!--<th>活动文案</th>-->
+                        <th>活动开始时间</th>
+                        <th>活动结束时间</th>
+                        <th class="text-center">状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tooltip-fn">
+                    <volist name="activityRows" id="activityRow">
+                        <tr>
+                            <td class="text-center">{{:get_sequence($pagesize, $i)}}</td>
+                            <td>{{$activityRow.wechat_id}}</td>
+                            <td>{{$activityRow.activity_name}}</td>
+                            <td>{{$activityRow.keyword}}</td>
+                            <!--<td>{{$activityRow.content}}</td>-->
+                            <td>{{$activityRow.start_time|date="Y-m-d H:i:s",###}}</td>
+                            <td>{{$activityRow.end_time|date="Y-m-d H:i:s",###}}</td>
+                            <td class="text-center">
+                            <if condition="$activityRow.status eq 1">
+                            <span class="text-navy">可用</span>
+                            <else/>
+                            <span class="text-danger">禁用</span>
+                            </if>
+                            </td>
+                            <td>
+                                <a href="{{:U('couponList',array('id'=>$activityRow['id']))}}" class="btn btn-sm btn-primary">优惠券列表</a>
+                                <a href="{{:U('info',array('id'=>$activityRow['id']))}}" class="btn btn-sm btn-success">编辑</a>
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-sm-12 pager"><include file="Common/page" /></div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 全局js -->
+    <script src="__PUBLIC__/js/jquery.min.js?v=2.1.1"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js?v=3.4.0"></script>
+
+    <!-- 自定义js -->
+    <script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
+</body>
+</html>

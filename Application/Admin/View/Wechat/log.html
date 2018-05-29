@@ -9,6 +9,7 @@
     <link href="__PUBLIC__/css/font-awesome.min.css?v=4.3.0" rel="stylesheet">
     <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
     <link href="__PUBLIC__/css/style.min.css?v=3.2.0" rel="stylesheet">
+    <meta name="referrer" content="never">
 </head>
 
 <body class="gray-bg">
@@ -16,7 +17,7 @@
 
     <div class="ibox">
         <div class="ibox-title">
-            <h5>自定义二维码扫码统计</h5>
+            <h5>微信接口日志</h5>
             <div class="ibox-tools">
                 <a id="page-refresh" href="javascript:;">
                     <i class="fa fa-refresh"></i> 刷新
@@ -30,18 +31,10 @@
                     <form method="get" action="" autocomplete="off">
                         <div class="row">
                             <div class="col-sm-3 m-b">
-                                <select name="event_key_data" class="form-control">
-                                    <option value="">二维码参数</option>
-                                    <volist name="event_key" id="v">
-                                        <option value="{{$v.event_key_data}}" <if condition="$filter.event_key_data eq $v['event_key_data']">selected="selected"</if>>{{$v.event_key_data}}</option>
-                                    </volist>
-                                </select>
-                            </div>
-                            <div class="col-sm-3 m-b">
-                                <select name="token" class="form-control">
-                                    <option value="">宽带品牌</option>
-                                    <volist name="apps" id="v">
-                                        <option value="{{$v.token}}" <if condition="$filter.token eq $v['token']">selected="selected"</if>>{{$v.public_name}}</option>
+                                <select name="log_type" class="form-control">
+                                    <option value="">日志类型</option>
+                                    <volist name=":get_log_type()" id="v">
+                                        <option value="{{$v.key}}" <if condition="$filter.log_type eq $v['key']">selected="selected"</if>>{{$v.val}}</option>
                                     </volist>
                                 </select>
                             </div>
@@ -60,9 +53,9 @@
                     <thead>
                     <tr>
                         <th class="text-center col-sm-1">编号</th>
-                        <th class="text-center col-sm-2">日期</th>
-                        <th>关键词</th>
-                        <th class="text-center col-sm-2">扫码数量</th>
+                        <th class="text-center col-sm-1">日志类型</th>
+                        <th>数据</th>
+                        <th class="text-center col-sm-2">时间</th>
                     </tr>
                     </thead>
 
@@ -70,9 +63,9 @@
                     <volist name="list_data" id="v">
                         <tr>
                             <td class="text-center">{{$i}}</td>
-                            <td class="text-center">{{$v.time_day}}</td>
-                            <td>{{$v.event_key_data}}</td>
-                            <td class="text-center">{{$v.access_num}}</td>
+                            <td class="text-center">{{:get_log_type($v['log_type'])['val']}}</td>
+                            <td style="word-break: break-all;">{{$v.data}}</td>
+                            <td class="text-center">{{$v.create_time|date='Y-m-d H:i:s',###}}</td>
                         </tr>
                     </volist>
                     </tbody>
@@ -83,9 +76,9 @@
                 </div>
 
                 <else />
-                <h1 class="wrapper text-center"> 
+                <h1 class="wrapper text-center">
                     <i class="fa fa-4x fa-weixin"></i>
-                    <p class="m-t">暂无扫码数据</p>
+                    <p class="m-t">暂无日志数据</p>
                 </h1>
             </notempty>
         </div>
@@ -98,6 +91,5 @@
 <!-- 自定义js -->
 <script src="__PUBLIC__/js/content.min.js?v={$time}"></script>
 <script src="__PUBLIC__/js/plugins/chartJs/Chart.min.js"></script>
-
 </body>
 </html>

@@ -20,10 +20,14 @@ use Admin\Model\WechatModel;
 use \Org\Util\Page;
 use \Think\Exception;
 use \Admin\Service\Helper;
+use Admin\Service\Log;
 
 class WxMaterialController extends WechatBaseController
 {
+    protected $function_name = 'Material';
     public function text(){
+
+
         $token = $this->token;
         $listArr = M('material_text')->where("token = '$token'")->field(['content','id'])->select();
         $list_data ['list_data'] = $listArr;
@@ -65,17 +69,27 @@ class WxMaterialController extends WechatBaseController
 
             $this->_check_text_content($data['content']);
 
+            $info_after = $data;
+            unset($info_after['__hash__']);
+            $info_after = json_encode(($info_after),JSON_UNESCAPED_UNICODE);
+
             if($materialTextModel->create()){
                 if($create){
+                    $desc = '添加文本素材';
                     if(!$materialTextModel->add($data)){
                         throw new Exception('文本素材添加失败-'.$materialTextModel->getError(), 6001);
                     }
                 }else{
+                    $desc = '修改文本素材';
+                    $where['id'] = $data['id'];
+                    $info_before = json_encode($materialTextModel->where($where)->find(),JSON_UNESCAPED_UNICODE);
                     if($materialTextModel->save($data) === false){
                         throw new Exception('文本素材更新失败-'.$materialTextModel->getError(), 6001);
                     }
                 }
             }
+
+            Log::weixinLog($this->function_name, $this->public_name,$desc, $info_before, $info_after);
 
             $this->success("保存成功",U('text',array('wpid'=>$this->wpid)));
             die;
@@ -147,22 +161,29 @@ class WxMaterialController extends WechatBaseController
                 $Wechat = new WechatModel($data['token']);
                 $result = $Wechat->uploadImage($data['cover_url']);
                 $media_id = $result['media_id'];
+                if(empty($media_id)){
+                    $this->error ( '上传图文到微信出错，请稍后重试' );
+                }else{
+                    $data['media_id'] = $media_id;
+                    $data['wechat_url'] = $result['url'];
+                }
+
             }
 
-
-            if(empty($media_id)){
-                $this->error ( '上传图文到微信出错，请稍后重试' );
-            }else{
-                $data['media_id'] = $media_id;
-                $data['wechat_url'] = $result['url'];
-            }
+            $info_after = $data;
+            unset($info_after['__hash__']);
+            $info_after = json_encode(($info_after),JSON_UNESCAPED_UNICODE);
 
             if ($Model->create()) {
                 if ($update) {
+                    $desc = '修改图片素材';
+                    $where['id'] = $data['id'];
+                    $info_before = json_encode($Model->where($where)->find(),JSON_UNESCAPED_UNICODE);
                     if (!$Model->save($data)) {
                         throw new Exception('图片素材更新失败-' . $Model->getError(), 6001);
                     }
                 } else {
+                    $desc = '添加图片素材';
                     if (!$Model->add($data)) {
                         throw new Exception('图片素材添加失败-' . $Model->getError(), 6001);
                     }
@@ -171,6 +192,7 @@ class WxMaterialController extends WechatBaseController
                 throw new Exception('品牌数据校验失败-' . $Model->getError(), 6001);
             }
 
+            Log::weixinLog($this->function_name, $this->public_name,$desc, $info_before, $info_after);
             $this->success('添加图片素材操作成功', U('image',array('wpid'=>$this->wpid)));
             die;
 
@@ -207,8 +229,6 @@ class WxMaterialController extends WechatBaseController
 
 
     public function newsInfo(){
-
-
         $params = I();
         $time = time();
         $this->assign('time', $time);
@@ -246,20 +266,26 @@ class WxMaterialController extends WechatBaseController
                 $data['pic_url'] = Helper::UploadImg($_FILES['image_file'], 'wechat');
                 $result = $this->uploadImage($data);
                 if(empty($result)){
-                    /*throw new Exception('图文素材添加失败-' . $Model->getError(), 6001);*/
-                    $link = '/Public/upload/images/wechat/'.$data['pic_url'];
-                    $data['link'] = $link;
+                    throw new Exception('图文素材添加失败-' . $Model->getError(), 6001);
                 }else{
                     $data['link'] = $result['url'];
                 }
             }
 
+            $info_after = $data;
+            unset($info_after['__hash__']);
+            $info_after = json_encode(($info_after),JSON_UNESCAPED_UNICODE);
+
             if ($Model->create()) {
                 if ($update) {
+                    $desc = '更新图文素材';
+                    $where['id'] = $data['id'];
+                    $info_before = json_encode($Model->where($where)->find(),JSON_UNESCAPED_UNICODE);
                     if (!$Model->save($data)) {
                         throw new Exception('图文素材更新失败-' . $Model->getError(), 6001);
                     }
                 } else {
+                    $desc = '添加图文素材';
                     if (!$Model->add($data)) {
                         throw new Exception('图文素材添加失败-' . $Model->getError(), 6001);
                     }
@@ -267,6 +293,8 @@ class WxMaterialController extends WechatBaseController
             } else {
                 throw new Exception('图文数据校验失败-' . $Model->getError(), 6001);
             }
+
+            Log::weixinLog($this->function_name, $this->public_name,$desc, $info_before, $info_after);
 
             $this->success('添加图文素材操作成功', U('news',array('wpid'=>$this->wpid)));
             die;
@@ -363,6 +391,83 @@ class WxMaterialController extends WechatBaseController
         if (strlen ( $content ) > 2048) {
             $this->error ( '110139:文本内容不超过600个字' );
         }
+    }
+
+    function syncRawNews(){
+        echo "功能已停用";exit();
+        set_time_limit(0);//0表示不限时
+        $data['token'] = $this->token;
+
+        $Wechat = new WechatModel($data['token']);
+        $Wechat->syncNews();
+        $desc = '同步微信图文素材到本地素材库';
+        Log::weixinLog($this->function_name, $this->public_name,$desc, null, null);
+        $this->rawNews();
+    }
+
+    function rawNews(){
+        echo "功能已停用";exit();
+        //图文列表
+        $token = $this->token;
+        $params = I('get.');
+        $page_row = C('PAGE_SIZE');
+        $page = isset($params['p']) ? intval($params['p']) : 0;
+
+        $where = "token = '$token'";
+
+        $keyword = isset($params['keyword']) ? trim($params['keyword']) : '';
+        if(!empty($keyword)){
+            $where .= " and (title like '%".$keyword."%' or digest like '%".$keyword."%') ";
+        }
+
+        $is_used = isset($params['is_used']) ? intval($params['is_used']) : 0;
+        if(!empty($is_used)){
+            $where .= " and is_used = $is_used";
+        }
+
+
+        $count = M('raw_news')->where($where)->count();
+        $Page = new Page($count, $page_row);
+        $show = $Page->show();
+
+        $listArr = M('raw_news')->where($where)
+            ->field(['title','digest','url','thumb_url','id','is_used'])
+            ->page($page . ", $page_row")
+            ->select();
+        $list_data ['list_data'] = $listArr;
+
+        $this->assign('filter', $params);
+
+        $this->assign('pages', $show);
+        $this->assign('page_row', $page_row);
+        $this->assign ( $list_data );
+        $this->display('rawNews');
+    }
+
+    function addRawNews(){
+        echo "功能已停用";exit();
+        $token = $this->token;
+        $params = I('get.');
+        $where['id'] = $params['id'];
+        $where['token'] = $token;
+        $rawNews = M('raw_news')->where($where)->find();
+        $news['title'] = $rawNews['title'];
+        $news['intro'] = $rawNews['digest'];
+        $news['url'] = $rawNews['url'];
+        $news['link'] = $rawNews['thumb_url'];
+        $news['token'] = $rawNews['token'];
+        $news['created_at'] = time();
+        $news['operator_id'] = session(C('USER_AUTH_KEY'));
+        $news['operator_name'] = session('admin.name');
+        M('material_news')->add($news);
+        $rawNews['is_used'] = 1;
+        M('raw_news')->save($rawNews);
+        $desc = '从微信素材库添加素材到本地素材库';
+        $info_before = json_encode($news,JSON_UNESCAPED_UNICODE);
+        Log::weixinLog($this->function_name, $this->public_name,$desc, null, $info_before);
+
+        $this->rawNews();
+
     }
 
 
