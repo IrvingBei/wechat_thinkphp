@@ -20,7 +20,7 @@ use \Org\Util\Page;
 use \Think\Exception;
 
 
-class AdminController extends C_AdminController
+class SystemController extends C_AdminController
 {
     /**
      * 用户列表

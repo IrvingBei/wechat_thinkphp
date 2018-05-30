@@ -175,6 +175,29 @@ class WechatModel extends Model
         }
 
 
+        //通过关键词领券的活动
+        if(! isset ( $addons [$key] ) && ($data['MsgType'] == 'text')){
+
+
+            $activity = $this->getCoupenActivity($key);
+            /*$where['keyword'] = $key;
+            $where['status'] = 1;
+            $activity = M('coupon_activity')->where($where)->find();*/
+
+
+            if(empty($activity)){
+                //未查询到有效活动，不做处理
+            }else{
+                $wechat_id = $activity['wechat_id'];
+                $wechat_id = json_decode($wechat_id,true);
+                if(in_array($data['ToUserName'],$wechat_id)){
+                    $addons [$key] = 'Coupon';
+                    $keywordArr = $activity;
+                    $model = new CouponModel($this->token);
+                }
+            }
+        }
+
         //NoAnswer
         if (! isset ( $addons [$key] )){
 
@@ -230,7 +253,7 @@ class WechatModel extends Model
         if(!empty($keywordArr)){
 
             //未认证只能发送一条消息，无法发送客服消息
-            $this->autoReply($keywordArr[0]);
+            //$this->autoReply($keywordArr[0]);
 
             if(count($keywordArr) == 1){
                 //回复数据只有一个，发送自动回复
@@ -518,6 +541,32 @@ class WechatModel extends Model
     public function getAccessToken(){
        return $this->common->getAccessToken();
     }
+
+    public function getCoupenActivity($keyword){
+
+        $activity = S($keyword);
+
+        if(empty($activity)){
+            $where['keyword'] = $keyword;
+            $where['status'] = 1;
+            $activity = M('coupon_activity')->where($where)->find();
+            //缓存5分钟
+            S($keyword,$activity,300);
+        }
+
+        return $activity;
+    }
+
+    public function getUserInfo($open_id){
+        $user_info = S($open_id);
+        if(empty($user_info)){
+            $user_info = $this->user->getUserInfo($open_id);
+            //缓存7天
+            S($open_id,$user_info,604800);
+        }
+        return $user_info;
+    }
+
 
 
 }

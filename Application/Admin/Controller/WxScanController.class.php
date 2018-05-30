@@ -17,7 +17,7 @@
 namespace Admin\Controller;
 
 use \Org\Util\Page;
-
+use Common\Controller\AdminController;
 
 class WxScanController extends AdminController
 {
