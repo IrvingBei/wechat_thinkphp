@@ -6,19 +6,14 @@ use Think\Model;
 class WechatModel extends Model
 {
 
-    protected $common;
-    protected $receive;
-    protected $user;
-    protected $tools;
     protected $media;
-    protected $custom;
     protected $extends;
-    protected $oauth;
-    protected $script;
     protected $menu;
+    protected $config;
+    protected $token;
 
     //关闭模型验证
-    protected $autoCheckFields  =   false;
+    protected $autoCheckFields = false;
 
     public function __construct($token)
     {
@@ -30,25 +25,21 @@ class WechatModel extends Model
         if(empty($options)){
             $where['token'] = $token;
             $options = M('apps')->where($where)
-                ->field(['token','wechat_token','appid','appsecret','oauth_url'])
+                ->field(['token','wechat_token','appid','appsecret','hot_line'])
                 ->find();
             if(empty($options)){
-                exit('success');
+                exit('error');
             }
             //echo M()->getLastSql();
             $options['cachepath'] = LOG_PATH.'wechat/'.$token;
             S($key, $options,5000);
         }
 
+        $this->token = $token;
+        $this->config = $options;
         $this->getconfig = \Wechat\Loader::config($options);
-        $this->user = new \Wechat\WechatUser();
-        $this->receive = new \Wechat\WechatReceive();
-        $this->common = new \Wechat\Lib\Common();
         $this->media = new \Wechat\WechatMedia();
-        $this->custom = new \Wechat\WechatCustom();
         $this->extends = new \Wechat\WechatExtends();
-        $this->oauth = new \Wechat\WechatOauth();
-        $this->script = new \Wechat\WechatScript();
         $this->menu = new \Wechat\WechatMenu();
 
     }
