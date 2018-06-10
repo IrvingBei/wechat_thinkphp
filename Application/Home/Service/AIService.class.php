@@ -4,13 +4,13 @@ namespace Home\Service;
 class AIService
 {
 
-    protected $type,$api_result,$result,$request_time,$response_time,$text,$api_account,$data;
+    protected $type,$api_result,$result,$request_time,$response_time,$text,$api_account,$data,$type_code;
 
     protected function error($result){
         //错误处理
         if(!empty($result['error_code'])){
             //记录错误日志
-            add_debug_log($result,'BaiduAI');
+            add_debug_log($result,'BaiduAI',2);
             //print_r($result);
             $error_code = $result['error_code'];
             if($error_code < 20){

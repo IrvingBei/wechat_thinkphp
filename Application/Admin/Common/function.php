@@ -85,17 +85,7 @@ function get_area($area_level, $parent_id, $area_id, $is_show = 0){
     return $citys;
 }
 
-/**
- * 获取宽带品牌信息
- */
-function get_sites($site_id = null) {
-    if (is_null($site_id)) {
-    	$res = M("site")->where("status = 1")->select();
-    } else {
-    	$res = M("site")->where("status = 1 and site_id = '$site_id'")->getField("site_name");
-    }
-    return $res;
-}
+
 
 /**
  * 获取渠道信息

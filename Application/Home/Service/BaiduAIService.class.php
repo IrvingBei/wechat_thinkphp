@@ -57,18 +57,23 @@ class BaiduAIService extends AIService
         $request_time = time();
         switch ($type){
             case '植物':
+                $this->type_code = 2;
                 $result = $this->image->plantDetect($image);
                 break;
             case '车辆':
+                $this->type_code = 4;
                 $result = $this->image->carDetect($image);
                 break;
             case '动物':
+                $this->type_code = 3;
                 $result = $this->image->animalDetect($image);
                 break;
             case '商标':
+                $this->type_code = 7;
                 $result = $this->image->logoSearch($image);
                 break;
             case '菜品':
+                $this->type_code = 5;
                 $result = $this->image->dishDetect($image);
                 break;
             default:
@@ -124,6 +129,7 @@ class BaiduAIService extends AIService
     }
 
     protected function ocr($url){
+        $this->type_code = 1;
         $request_time = time();
         $result = $this->client->basicGeneralUrl($url);
         $this->result = json_encode($result,JSON_UNESCAPED_UNICODE);
