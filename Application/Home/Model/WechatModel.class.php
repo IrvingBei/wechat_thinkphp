@@ -407,7 +407,8 @@ class WechatModel extends Model
                 if ($k > 8)
                     continue;
                 //从本地跳转
-                $url = getRedirectUrl().$vo ['url'];
+                //$url = getRedirectUrl().$vo ['url'];
+                $url = $vo ['url'];
                 $articles [] = array (
                     'Title' => $vo ['title'],
                     'Description' => $vo ['intro'],
@@ -489,7 +490,8 @@ class WechatModel extends Model
             $vo = M ( 'material_news' )->where ( $map )->find ();
 
             //从本地跳转
-            $url = getRedirectUrl().$vo ['url'];
+            //$url = getRedirectUrl().$vo ['url'];
+            $url = $vo ['url'];
 
             // 文章内容
             $art ['title'] = $vo ['title'];
